@@ -3,6 +3,7 @@
 local FileExists = request('!.file_system.file.exists')
 local GetPortParams = request('!.mechs.tty.get_port_params')
 local SetNonBlockingRead = request('!.mechs.tty.set_non_blocking_read')
+local SleepSec = request('!.system.sleep')
 
 --[[
   Open port both for reading and writing.
@@ -35,6 +36,9 @@ local ConnectTo =
     self.BorrowedFileOutput.FileHandle = self.FileHandle
 
     self.IsConnected = true
+
+    local WarmupDelaySec = 3.5
+    SleepSec(WarmupDelaySec)
 
     print(
       string.format(
