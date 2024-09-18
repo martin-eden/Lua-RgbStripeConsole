@@ -1,6 +1,5 @@
 -- Close UART device opened for reading and writing
 
-local GetPortParams = request('!.mechs.tty.get_port_params')
 local SetPortParams = request('!.mechs.tty.set_port_params')
 
 --[[
@@ -12,19 +11,26 @@ local Disconnect =
       return
     end
 
-    io.close(self.FileHandle)
+    --[[
+      -- io.close(self.FileHandle)
+
+      Avoiding device reset upon program exit. Just don't close
+      file!
+
+      Very stupid solution but I want pixels on my LED stripe to
+      remain lit upon program termination.
+
+      Curiously enough, I've not encountered problems with dangling
+      file handle. Surely it is closed somehow when Lua exits, but
+      some other way than via "io.close()" which resets device.
+    ]]
+    -- io.close(self.FileHandle)
     self.FileHandle = nil
 
     self.BorrowedFileInput.FileHandle = nil
     self.BorrowedFileOutput.FileHandle = nil
 
-    local CurrentPortParams = GetPortParams(self.PortName)
-    if (CurrentPortParams == self.OriginalPortParams) then
-      print('Read. Params are same, no need for SetPortParams().')
-    else
-      print('Read. Restoring original port params.')
-      SetPortParams(self.PortName, self.OriginalPortParams)
-    end
+    SetPortParams(self.PortName, self.OriginalPortParams)
     self.OriginalPortParams = nil
 
     self.PortName = nil

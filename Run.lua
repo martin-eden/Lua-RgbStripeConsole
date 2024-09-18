@@ -45,4 +45,4 @@ Stripe:SendLines(Lines, Teletype)
 
 SleepSec(1);
 
-Teletype:Close()
+-- Teletype:Close()
