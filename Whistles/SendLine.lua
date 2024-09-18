@@ -1,5 +1,8 @@
 -- Send line to output with terminal printing
 
+local SleepSec = request('!.system.sleep')
+
+-- Send line to output (usually UART device) with some delay
 local PrintLine =
   function(self, Line, Output)
     local OutputFormat =
@@ -12,6 +15,9 @@ local PrintLine =
 
     Output:Write(Line)
     Output:Write('\n')
+
+    local LineDelaySec = .25
+    SleepSec(LineDelaySec)
   end
 
 -- Exports:
