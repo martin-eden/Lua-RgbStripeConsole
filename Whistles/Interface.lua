@@ -10,6 +10,7 @@
 
 return
   {
+    ReadLine = request('ReadLine'),
     ReadLines = request('ReadLines'),
 
     SendLine = request('SendLine'),

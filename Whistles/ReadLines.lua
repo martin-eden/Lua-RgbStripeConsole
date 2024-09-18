@@ -11,31 +11,9 @@
 local ReadLines =
   function(self, FileHandle)
     local Lines = {}
-    for Line in FileHandle:lines() do
+
+    while self:ReadLine(FileHandle) do
       table.insert(Lines, Line)
-    end
-
-    -- Just some pretty-printing with tracking longest line index length
-    do
-      local NumDigitsAtMaxIndex
-      NumDigitsAtMaxIndex = #tostring(#Lines)
-
-      --[[
-        Alternative
-
-          string.format('%%0%dd', NumDigitsAtMaxIndex)
-
-        is a lot worse.
-      ]]
-      local LineNumFormat =
-        '%0' .. NumDigitsAtMaxIndex .. 'd'
-
-      local FullLineFormat =
-        '> [' .. LineNumFormat .. '] %s'
-
-      for Index, Line in ipairs(Lines) do
-        print(string.format(FullLineFormat, Index, Line))
-      end
     end
 
     return Lines

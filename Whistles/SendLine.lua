@@ -3,7 +3,7 @@
 local PrintLine =
   function(self, Line, Output)
     local OutputFormat =
-      '> (%s)'
+      '< (%s)'
 
     local OutputLine =
       string.format(OutputFormat, Line)
