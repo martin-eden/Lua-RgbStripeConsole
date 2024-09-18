@@ -3,9 +3,12 @@
 return
   function(self, Lines, Output)
     assert_table(Lines)
+
+    print(string.format('( Sending %d lines.', #Lines))
+
     for Index, Line in ipairs(Lines) do
-      print(string.format('< [%02d] %s', Index, Line))
-      Output:Write(Line)
-      Output:Write('\n')
+      self:SendLine(Line, Output)
     end
+
+    print(string.format(') Sent %d lines.', #Lines))
   end

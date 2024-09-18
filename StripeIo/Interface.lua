@@ -2,5 +2,4 @@
 
 return
   {
-    SendLines = request('SendLines'),
   }

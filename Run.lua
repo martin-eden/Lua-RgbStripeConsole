@@ -3,6 +3,7 @@ require('workshop.base')
 
 local Teletype = request('Teletype.Interface')
 local Stripe = request('StripeIo.Interface')
+local Whistles = request('Whistles.Interface')
 
 local SleepSec = request('!.system.sleep')
 
@@ -32,22 +33,11 @@ while true do
 end
 --]]
 
-local LineNumber = 0
-for Line in Teletype.FileHandle:lines() do
-  LineNumber = LineNumber + 1
-  print(string.format('> [%02d] %s', LineNumber, Line))
-end
+Whistles:ReadLines(Teletype.FileHandle)
 
-local Lines =
-  {
-    'R',
-    'SP 12 0 0 255',
-    'SP 30 0 255 0',
-    'SP 48 255 0 0',
-    'D',
-  }
+local DataFileName = 'Data.Stripe'
 
-Stripe:SendLines(Lines, Teletype)
+Whistles:SendFile(DataFileName, Teletype)
 
 SleepSec(1);
 
