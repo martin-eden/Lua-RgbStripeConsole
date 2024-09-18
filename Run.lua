@@ -13,7 +13,7 @@ Teletype:Open(PortName)
 local WarmupDelaySec = 3.5
 SleepSec(WarmupDelaySec)
 
--- [[
+--[[
 while true do
   local MaxChunkLen = 400
   local InterchunkDelaySec = 0.1
@@ -31,6 +31,12 @@ while true do
   end
 end
 --]]
+
+local LineNumber = 0
+for Line in Teletype.FileHandle:lines() do
+  LineNumber = LineNumber + 1
+  print(string.format('> [%02d] %s', LineNumber, Line))
+end
 
 local Lines =
   {
