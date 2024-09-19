@@ -6,7 +6,7 @@ require('workshop.base')
 local Teletype = request('Teletype.Interface')
 local Whistles = request('Whistles.Interface')
 
-local PortName = '/dev/ttyUSB1'
+local PortName = '/dev/ttyUSB0'
 
 Teletype:Open(PortName)
 
