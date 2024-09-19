@@ -18,7 +18,7 @@ while true
 do
   lua MakePlasm.lua
   lua SendData.lua
-  sleep 5
+  sleep 45
 done
 
 # 2024-09-18

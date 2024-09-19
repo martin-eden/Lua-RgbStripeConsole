@@ -108,7 +108,7 @@ local NoiseFunction =
     local DistanceNoise = DistanceNoiseFunc(Distance)
     local MaxDistanceNoise = DistanceNoiseFunc(StripeLength)
 
-    local Scale = 5.0
+    local Scale = 2.0
 
     local Noise =
       Scale *
