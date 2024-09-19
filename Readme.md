@@ -4,7 +4,7 @@
 
 Lua interface for sending data to RGB stripe.
 
-[Image][Images/Stripe.png]
+![Image](Images/Stripe.png)
 
 
 ## Design
@@ -14,16 +14,16 @@ RGB stripe is connected to Arduino. It has it's own [firmware]
 
 Lua is used in two roles here.
 
-First is file sender. It opens Arduino as file "/dev/ttyUSB0". It opens
-text file ["Data.Stripe"][Data.Stripe]. It sends lines from text file
+First is [file sender](SendData.lua). It opens Arduino as file "/dev/ttyUSB0". It opens
+text file [Data.Stripe](Data.Stripe). It sends lines from text file
 to Arduino.
 
 Second is file generator. Generally it's Lua program that generates
 "Data.Stripe" text file.
 
-One implementation is basic test (["MakeTest.lua"][MakeTest.lua]).
+One implementation is basic test ([MakeTest.lua](MakeTest.lua)).
 
-Other is "Plasm" gradient generation (["MakePlasm.lua"][MakePlasm.lua]).
+Other is "Plasm" gradient generation ([MakePlasm.lua](MakePlasm.lua)).
 I've figured out this algorithm like twenty years ago and implemented
 2D versions in Delphi and QBASIC.
 
