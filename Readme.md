@@ -4,10 +4,12 @@
 
 Lua interface for sending data to RGB stripe.
 
+[Image][Images/Stripe.png]
+
 
 ## Design
 
-RGB stripe is connected to Arduino. It has it's own firmware
+RGB stripe is connected to Arduino. It has it's own [firmware]
 (written by me in C++). It has text interface.
 
 Lua is used in two roles here.
@@ -99,5 +101,8 @@ For Arduino side you'll need Arduino (lol), WS2812B RGB stripe,
 
 ## See also
 
-* ["Server" part](https://github.com/martin-eden/Embedded-me_RgbStripeConsole)
+* ["Server" part][firmware]
+* [WS2812B driver](https://github.com/martin-eden/Embedded-me_Ws2812b)
 * [My other repositories](https://github.com/martin-eden/contents)
+
+[firmware]: https://github.com/martin-eden/Embedded-me_RgbStripeConsole
