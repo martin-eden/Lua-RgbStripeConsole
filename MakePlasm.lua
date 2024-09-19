@@ -20,26 +20,105 @@ Stripe:Init(Output)
 
 Stripe:Reset()
 
+-- Stripe length in pixels
 local StripeLength = 60
+
+--[[
+  Max color component value
+
+  I'm having USB interface brownout on my Arduino connected to
+  keyboard (lol) when most of pixel color components are 255.
+]]
+local MaxColorValue = 90
+
+-- Just return valid random color
+local GetRandomColor =
+  function()
+    local Red = math.random(0, MaxColorValue)
+    local Green = math.random(0, MaxColorValue)
+    local Blue = math.random(0, MaxColorValue)
+    return { Red = Red, Green = Green, Blue = Blue }
+  end
 
 local LeftPixel =
   {
     Index = 0,
-    Color = { Red = 64, Green = 64, Blue = 64 },
+    Color = GetRandomColor(),
   }
 
 local RightPixel =
   {
     Index = StripeLength - 1,
-    Color = { Red = 64, Green = 64, Blue = 64 },
+    Color = GetRandomColor(),
   }
+
+-- Roberto, can we have [-1, 1] random()?
+local SymmetricRandom =
+  function()
+    return (math.random() * 2.0) - 1.0
+  end
+
+-- Static noise
+local StaticNoise =
+  function()
+    return SymmetricRandom() * 0.05
+  end
+
+-- Linear noise
+local LinearNoise =
+  function(Distance)
+    return Distance
+  end
+
+-- Quadratic noise
+local QuadraticNoise =
+  function(Distance)
+    return Distance ^ 2
+  end
+
+-- Square root noise
+local SqrtNoise =
+  function(Distance)
+    return Distance ^ 0.5
+  end
+
+-- Logarithmic noise
+local LogNoise =
+  function(Distance)
+    return math.log(Distance, 2)
+  end
+
+-- Limit float value to given range
+local Clamp =
+  function(Value, MinValue, MaxValue)
+    if (Value < MinValue) then
+      return MinValue
+    end
+    if (Value > MaxValue) then
+      return MaxValue
+    end
+    return Value
+  end
 
 -- Return some float in range [-1.0, +1.0]
 local NoiseFunction =
   function(Distance)
-    local SymmetricRandom = (math.random() * 2.0) - 1.0
-    local Scale = 0.6
-    return Scale * (Distance / StripeLength) * SymmetricRandom
+    local DistanceNoiseFunc = LogNoise
+
+    local DistanceNoise = DistanceNoiseFunc(Distance)
+    local MaxDistanceNoise = DistanceNoiseFunc(StripeLength)
+
+    local Scale = 2.0
+
+    local Noise =
+      Scale *
+      (DistanceNoise / MaxDistanceNoise) *
+      SymmetricRandom() +
+      StaticNoise()
+
+    Noise = Clamp(Noise, -1.0, 1.0)
+
+    return Noise
   end
 
 -- Calculate middle integer between two integers
@@ -48,14 +127,14 @@ local GetMiddle =
     return (Left + Right) // 2
   end
 
--- Clamp value for byte range [0, 255]
-local ClampToByte =
+-- Clamp value for color range [0, MaxColorValue]
+local ClampColorComponent =
   function(Value)
     if (Value < 0) then
       return 0
     end
-    if (Value > 128) then
-      return 128
+    if (Value > MaxColorValue) then
+      return MaxColorValue
     end
     Value = math.floor(Value)
 
@@ -67,21 +146,10 @@ local MixColor =
   function(ColorA, ColorB, Noise)
     local Result
 
-    Result = GetMiddle(ColorA, ColorB) + (Noise * 255)
+    -- Actually we're summing two color signals here:
+    Result = GetMiddle(ColorA, ColorB) + (Noise * MaxColorValue)
 
-    Result = ClampToByte(Result)
-
-    --[[
-    print(
-      string.format(
-        'MixColor(%d, %d, %.2f) = %d',
-        ColorA,
-        ColorB,
-        Noise * 255,
-        Result
-      )
-    )
-    --]]
+    Result = ClampColorComponent(Result)
 
     return Result
   end
@@ -101,6 +169,8 @@ GeneratePlasm =
     if (Distance <= 0) then
       return
     end
+
+    -- print(string.format('Distance(%d) Noise(%.2f)', Distance, MakeNoise(Distance)))
 
     local MidwayPixel =
       {

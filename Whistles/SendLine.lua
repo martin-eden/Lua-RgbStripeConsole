@@ -11,12 +11,12 @@ local PrintLine =
     local OutputLine =
       string.format(OutputFormat, Line)
 
-    print(OutputLine)
+    -- print(OutputLine)
 
     Output:Write(Line)
     Output:Write('\n')
 
-    local LineDelaySec = .25
+    local LineDelaySec = .025
     SleepSec(LineDelaySec)
   end
 
