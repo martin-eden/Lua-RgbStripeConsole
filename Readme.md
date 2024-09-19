@@ -14,7 +14,7 @@ RGB stripe is connected to Arduino. It has it's own [firmware]
 
 Lua is used in two roles here.
 
-First is [file sender](SendData.lua). It opens Arduino as file "/dev/ttyUSB0". It opens
+First is [file sender](SendData.lua). It opens Arduino as file `/dev/ttyUSB0`. It opens
 text file [Data.Stripe](Data.Stripe). It sends lines from text file
 to Arduino.
 
