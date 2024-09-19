@@ -29,7 +29,7 @@ local StripeLength = 60
   I'm having USB interface brownout on my Arduino connected to
   keyboard (lol) when most of pixel color components are 255.
 ]]
-local MaxColorValue = 90
+local MaxColorValue = 80
 
 -- Just return valid random color
 local GetRandomColor =
@@ -108,7 +108,7 @@ local NoiseFunction =
     local DistanceNoise = DistanceNoiseFunc(Distance)
     local MaxDistanceNoise = DistanceNoiseFunc(StripeLength)
 
-    local Scale = 2.0
+    local Scale = 5.0
 
     local Noise =
       Scale *
