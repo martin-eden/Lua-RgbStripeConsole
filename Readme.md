@@ -13,16 +13,17 @@ RGB stripe is connected to Arduino. It has it's own firmware
 Lua is used in two roles here.
 
 First is file sender. It opens Arduino as file "/dev/ttyUSB0". It opens
-text file "Data.Stripe". It sends lines from text file to Arduino.
+text file ["Data.Stripe"][Data.Stripe]. It sends lines from text file
+to Arduino.
 
 Second is file generator. Generally it's Lua program that generates
 "Data.Stripe" text file.
 
-One implementation is basic test ("MakeTest.lua").
+One implementation is basic test (["MakeTest.lua"][MakeTest.lua]).
 
-Other is "Plasm" gradient generation ("MakePlasm.lua"). I've figured out
-this algorithm like twenty years ago and implemented 2D version in
-Delphi.
+Other is "Plasm" gradient generation (["MakePlasm.lua"][MakePlasm.lua]).
+I've figured out this algorithm like twenty years ago and implemented
+2D versions in Delphi and QBASIC.
 
 
 ### 1D Plasm
@@ -96,4 +97,7 @@ For Arduino side you'll need Arduino (lol), WS2812B RGB stripe,
 `arduino-cli` framework and my implementation.
 
 
--- Martin, 2024-09-19
+## See also
+
+* ["Server" part](https://github.com/martin-eden/Embedded-me_RgbStripeConsole)
+* [My other repositories](https://github.com/martin-eden/contents)
