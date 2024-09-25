@@ -142,7 +142,7 @@ local ClampColorComponent =
   end
 
 -- Mix color component for two pixels at some distance
-local MixColor =
+local Mix =
   function(ColorA, ColorB, Noise)
     local Result
 
@@ -178,19 +178,19 @@ GeneratePlasm =
         Color =
           {
             Red =
-              MixColor(
+              Mix(
                 LeftPixel.Color.Red,
                 RightPixel.Color.Red,
                 MakeNoise(Distance)
               ),
             Green =
-              MixColor(
+              Mix(
                 LeftPixel.Color.Green,
                 RightPixel.Color.Green,
                 MakeNoise(Distance)
               ),
             Blue =
-              MixColor(
+              Mix(
                 LeftPixel.Color.Blue,
                 RightPixel.Color.Blue,
                 MakeNoise(Distance)
