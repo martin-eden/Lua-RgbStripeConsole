@@ -2,7 +2,7 @@
 
 # Infinite demo of writing plasm pattern to RGB LED stripe
 #
-# ^Z stops script, ^C won't work
+# ^Z stops script, ^C will work only inside "sleep"
 #
 # I'm using this script as a background task while I'm coding.
 
@@ -18,7 +18,7 @@ while true
 do
   lua MakePlasm.lua
   lua SendData.lua
-  sleep 5
+  sleep 90
 done
 
 # 2024-09-18
