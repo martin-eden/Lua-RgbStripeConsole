@@ -101,7 +101,7 @@ local Clamp =
   end
 
 -- Return some float in range [-1.0, +1.0]
-local NoiseFunction =
+local MakeNoise =
   function(Distance)
     local DistanceNoiseFunc = LogNoise
 
@@ -163,7 +163,7 @@ local GeneratePlasm
   It looks great for 2D, but I want to tinker with 1D version.
 ]]
 GeneratePlasm =
-  function(LeftPixel, RightPixel, MakeNoise)
+  function(LeftPixel, RightPixel)
     local Distance = (RightPixel.Index - LeftPixel.Index) - 1
 
     if (Distance <= 0) then
@@ -201,13 +201,13 @@ GeneratePlasm =
     Stripe:SetPixel(MidwayPixel)
     Stripe:Display()
 
-    GeneratePlasm(LeftPixel, MidwayPixel, MakeNoise)
-    GeneratePlasm(MidwayPixel, RightPixel, MakeNoise)
+    GeneratePlasm(LeftPixel, MidwayPixel)
+    GeneratePlasm(MidwayPixel, RightPixel)
   end
 
 Stripe:SetPixel(LeftPixel)
 Stripe:SetPixel(RightPixel)
-GeneratePlasm(LeftPixel, RightPixel, NoiseFunction)
+GeneratePlasm(LeftPixel, RightPixel)
 
 Stripe:Display()
 
@@ -215,4 +215,5 @@ Output:CloseFile()
 
 --[[
   2024-09-18
+  2024-09-25
 ]]
