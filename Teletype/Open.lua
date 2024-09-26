@@ -11,7 +11,7 @@ local SleepSec = request('!.system.sleep')
   In case of errors explodes.
 ]]
 local ConnectTo =
-  function(self, PortName)
+  function(self, PortName, Speed)
     assert_string(PortName)
 
     if not FileExists(PortName) then
@@ -26,7 +26,7 @@ local ConnectTo =
 
     self.OriginalPortParams = GetPortParams(PortName)
 
-    local Baud = 57600
+    local Baud = Speed or 57600
     local ReadTimeoutSec = 0.5
     SetNonBlockingRead(PortName, ReadTimeoutSec, Baud)
 
