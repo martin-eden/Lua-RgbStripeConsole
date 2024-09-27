@@ -9,17 +9,17 @@ Lua interface for sending data to RGB stripe.
 
 ## Design
 
-RGB stripe is connected to Arduino. It has it's own [firmware]
+RGB stripe is connected to Arduino. On Arduino is [firmware][firmware]
 (written by me in C++). It has text interface.
 
 Lua is used in two roles here.
 
-First is [file sender](SendData.lua). It opens Arduino as file `/dev/ttyUSB0`. It opens
-text file [Data.Stripe](Data.Stripe). It sends lines from text file
-to Arduino.
+First is [file sender](SendData.lua). It opens Arduino as file
+`/dev/ttyUSB0`. It opens text file [Data.Stripe](Data.Stripe).
+It sends lines from text file to Arduino.
 
 Second is file generator. Generally it's Lua program that generates
-"Data.Stripe" text file.
+`Data.Stripe` text file.
 
 One implementation is basic test ([MakeTest.lua](MakeTest.lua)).
 
@@ -93,16 +93,16 @@ Weird but worth trying once.
 
 ## Requirements
 
-For Lua side it's just Linux and stock Lua 5.3+.
+For Lua side it's just Linux, stock Lua 5.3+ and this repo.
 
 For Arduino side you'll need Arduino (lol), WS2812B RGB stripe,
-`arduino-cli` framework and my implementation.
+`arduino-cli` framework and [my implementation][firmware].
 
 
 ## See also
 
-* ["Server" part][firmware]
-* [WS2812B driver](https://github.com/martin-eden/Embedded-me_Ws2812b)
-* [My other repositories](https://github.com/martin-eden/contents)
+* [Server part][firmware]
+* [My other repositories][contents]
 
 [firmware]: https://github.com/martin-eden/Embedded-me_RgbStripeConsole
+[contents]: https://github.com/martin-eden/contents
