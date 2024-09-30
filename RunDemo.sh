@@ -17,8 +17,15 @@ echo "---"
 while true
 do
   lua MakePlasm.lua
+
   lua SendData.lua
-  sleep 90
+
+  SleepDuration_Secs=90
+  echo "Taking $SleepDuration_Secs seconds nap."
+  sleep $SleepDuration_Secs
+
+  echo
 done
 
 # 2024-09-18
+# 2024-09-30
