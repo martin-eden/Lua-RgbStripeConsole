@@ -41,7 +41,7 @@ Then we can just set middle pixel to average color and divide.
 But it's boring. We should add some noise.
 
 So we're adding noise. Noise is actually smooth random color function
-between first and last pixels.
+between first and last pixels. Value range [-1.0, +1.0].
 
 Noise amplitude is dependent of distance between pixels. (Like gravity
 is inversely proportional to distance square. Same idea.)
@@ -51,44 +51,41 @@ greatest potential. To make it random, we multiply amplitude by
 random value in [-1.0, +1.0]:
 
 ```
-Noise = NoiseFunc(Distance) * random(-1.0, +1.0)
+Noise = NoiseAmpl(Distance) * random(-1.0, +1.0)
 ```
 
-Then we just calculate and add that noise value to averaged color of
-middle pixel and divide. A lot more interesting!
-
-Also we're adding some static noise. That made things look more
-realistic in my 2D implementation. And multiplying by some scale factor
-to have more or less color transitions in our stripe.
+Then we will amplify that noise to max color value and add it to
+averaged color of middle pixel and divide. A lot more interesting!
 
 ```
-Noise = Scale * NoiseFunc(Distance) * NormalizedRandom() + StaticNoise()
+ColorComponentNoise = floor(Noise * 0xFF)
 ```
 
-Okay, but range of NoiseFunc() should be in [-1.0, +1.0]. So we normalize
-it as `NoiseFunc(Distance) / NoiseFunc(MaxDistance)`.
+To have more or less color transitions in our stripe, we're multiplying
+distance by scale factor, keeping it in [0.0, 1.0] range:
+
+```
+Distance = Clamp(Scale * Distance, 0.0, 1.0)
+```
 
 And basically that's it.
 
 
 #### Noise function
 
-Generated gradient type is determined by NoiseFunc(). This function sets
-degree of freedom for given distance.
+Generated gradient type is determined by noise amplitude function:
 
-Variants I've tried:
+```
+NoiseAmpl(Distance: [0.0, 1.0]): [-1.0, +1.0]
+```
 
-* Linear: `return Distance`
-* Quadratic: `return Distance ^ 2`
-* Square root: `return Distance ^ 0.5`
-* Logarithmic: `return log(Distance, 2)`
+This function sets degree of freedom for given distance. Moreover,
+it determines how degree of freedom changes when distance is decreasing.
 
-Linear is okay but boring. Quadratic gives too small freedom after
-normalization. Square root and logarithmic are okay.
+I've tried several variants. Sine, quarter of circle, power.
+You can find them in [MakePlasm.lua](MakePlasm.lua).
 
-Also I've tried `return 1 / Distance`. This makes noise function
-discontinuous at every point and generates star-like gradient.
-Weird but worth trying once.
+Tinkering with this function is fun!
 
 
 ## Requirements
