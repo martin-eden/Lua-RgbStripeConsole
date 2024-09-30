@@ -15,7 +15,7 @@
 package.path = package.path .. ';../../?.lua'
 require('workshop.base')
 
-local Stripe = request('StripeWriter.Interface')
+local Stripe = request('OptimizingStripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Output.File')
 local Plasm = request('PlasmGenerator.Interface')
 
