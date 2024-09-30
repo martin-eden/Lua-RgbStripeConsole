@@ -1,4 +1,4 @@
--- [handy] Just print string and newline
+-- [handy] Print string and newline to <.Output>
 
 return
   function(self, String)
@@ -8,4 +8,5 @@ return
 
 --[[
   2024-09-18
+  2024-09-30
 ]]
