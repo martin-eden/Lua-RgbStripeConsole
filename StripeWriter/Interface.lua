@@ -30,6 +30,9 @@
 
 local Interface =
   {
+    -- Maintenance: Set output implementer
+    Init = request('Init'),
+
     -- Reset: makes pixels black
     Reset = request('Reset'),
     -- Display: send pixels to LED stripe
@@ -41,8 +44,6 @@ local Interface =
 
     -- Maintenance: output implementer
     Output = nil,
-    -- Maintenance: Set output implementer
-    Init = request('Init'),
     -- Handy: print string as line
     WriteLine = request('WriteLine'),
   }
