@@ -17,6 +17,7 @@
 
 local GetIndex = request('Internals.GetIndex')
 local UnpackColor = request('Internals.UnpackColor')
+local GetListChunk = request('!.concepts.List.GetChunk')
 
 return
   function(self, Args)
@@ -39,33 +40,29 @@ return
       of it will be lost. To stay safe we need to send lines
       under 64 bytes (Arduino's serial buffer size).
 
-      So one call of SetPixels() will split to several "SPR" commands.
-
-      We'll use recursion here.
-
-      Recursion depth is ((NumPixels / NumPixelsPerChunk) - 1).
-
-      Memory consumption is quadratic of recursion depth. That's
-      bad but should be acceptable for practical cases.
+      This block splits data to chunks and does self calls.
     ]]
     do
       local NumPixelsPerChunk = 4
       if (Length > NumPixelsPerChunk) then
-        -- Call ourselves with first chunk
-        local Head = {}
-        Head.StartIndex = StartIndex
-        Head.StopIndex = StartIndex + NumPixelsPerChunk - 1
-        Head.Colors = {}
-        table.move(Colors, 1, NumPixelsPerChunk, 1, Head.Colors)
-        self:SetPixels(Head)
+        local Chunk =
+          {
+            StartIndex = StartIndex,
+            StopIndex = 0,
+            Colors = {},
+          }
 
-        -- Call ourselves with chopped remainder
-        local Tail = {}
-        Tail.StartIndex = StartIndex + NumPixelsPerChunk
-        Tail.StopIndex = StopIndex
-        Tail.Colors = {}
-        table.move(Colors, NumPixelsPerChunk + 1, Length, 1, Tail.Colors)
-        self:SetPixels(Tail)
+        while (Chunk.StartIndex <= StopIndex) do
+          Chunk.StopIndex = Chunk.StartIndex + NumPixelsPerChunk - 1
+          if (Chunk.StopIndex > StopIndex) then
+            Chunk.StopIndex = StopIndex
+          end
+          local Colors_StartIndex = Chunk.StartIndex - StartIndex + 1
+          local Colors_StopIndex = Chunk.StopIndex - StartIndex + 1
+          Chunk.Colors = GetListChunk(Colors, Colors_StartIndex, Colors_StopIndex)
+          self:SetPixels(Chunk)
+          Chunk.StartIndex = Chunk.StopIndex + 1
+        end
 
         -- We won't fall-through
         return
@@ -107,4 +104,5 @@ return
 
 --[[
   2024-09-30
+  2024-10-03
 ]]
