@@ -1,5 +1,7 @@
 -- Display() wrapper that sends cached pixels as strides
 
+local GetListChunk = request('!.concepts.List.GetChunk')
+
 return
   function(self)
     -- Let's get a list of strides in set of cached pixels
@@ -55,13 +57,8 @@ return
       else
         local StartIndex = Stride.Start
         local StopIndex = Stride.Start + Stride.Length - 1
-        local StrideColors = {}
-        --[[
-          Well, we have to copy color records, we can't just pass
-          pointer to a middle of array. Sometimes (seldomly) I'm
-          missing C.
-        ]]
-        table.move(self.Pixels, StartIndex, StopIndex, 1, StrideColors)
+        local StrideColors =
+          GetListChunk(self.Pixels, StartIndex, StopIndex)
 
         self.StripeWriter:SetPixels(
           {
@@ -82,4 +79,5 @@ return
 
 --[[
   2024-09-30
+  2024-10-03
 ]]
