@@ -20,7 +20,7 @@ do
 
   lua SendData.lua
 
-  SleepDuration_Secs=90
+  SleepDuration_Secs=5
   echo "Taking $SleepDuration_Secs seconds nap."
   sleep $SleepDuration_Secs
 
