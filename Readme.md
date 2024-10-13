@@ -1,11 +1,26 @@
 # What
 
-(2024-09)
+(2024-09/2024-10)
 
 Lua interface for sending data to RGB stripe.
 
 ![Image](Images/Stripe.png)
 
+## Lua code example
+
+Excerpt from [MakeTest.lua](MakeTest.lua).
+
+```Lua
+local Blue = { Red = 0, Green = 0, Blue = 255 }
+local Green = { Red = 0, Green = 255, Blue = 0 }
+local Red = { Red = 255, Green = 0, Blue = 0 }
+
+Stripe:SetPixel({ Index = 12, Color = Blue })
+Stripe:SetPixel({ Index = 30, Color = Green })
+Stripe:SetPixel({ Index = 48, Color = Red })
+
+Stripe:Display()
+```
 
 ## Design
 
@@ -14,18 +29,37 @@ RGB stripe is connected to Arduino. On Arduino is [firmware][firmware]
 
 Lua is used in two roles here.
 
-First is [file sender](SendData.lua). It opens Arduino as file
-`/dev/ttyUSB0`. It opens text file [Data.Stripe](Data.Stripe).
-It sends lines from text file to Arduino.
+* File sender
 
-Second is file generator. Generally it's Lua program that generates
-`Data.Stripe` text file.
+  Sends `Data.Stripe` to Arduino.
 
-One implementation is basic test ([MakeTest.lua](MakeTest.lua)).
+* Data generator
 
-Other is "Plasm" gradient generation ([MakePlasm.lua](MakePlasm.lua)).
-I've figured out this algorithm like twenty years ago and implemented
-2D versions in Delphi and QBASIC.
+  That's what example code uses. Creates `Data.Stripe` file.
+
+
+## Files
+
+* [MakeTest.lua](MakeTest.lua) is a basic test.
+
+  It creates data file.
+
+* [MakePlasm.lua](MakePlasm.lua) is a "Plasm" gradient generator.
+
+  I've figured out this algorithm like twenty years ago and implemented
+  2D versions in Delphi and QBASIC.
+
+  It creates data file.
+
+  Data file is recompiled to reduce transfer time. It's cool but
+  not necessary step.
+
+* [SendData.lua](SendData.lua) is a file sender.
+
+  Sends data file.
+
+  It opens Arduino as device at `/dev/ttyUSB0`. Opens file
+  [`Data.Stripe`](Data.Stripe). And sends it line-by-line.
 
 
 ### 1D Plasm
