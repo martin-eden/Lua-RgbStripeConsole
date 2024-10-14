@@ -1,5 +1,7 @@
 -- Display() wrapper that sends cached pixels as strides
 
+-- Last mod.: 2024-10-14
+
 local GetListChunk = request('!.concepts.List.GetChunk')
 
 return
@@ -67,9 +69,10 @@ return
             Colors = StrideColors,
           }
         )
-        self.StripeWriter:Display()
       end
     end
+
+    self.StripeWriter:Display()
 
     -- Flush our cache
     self.Pixels = {}
@@ -80,4 +83,5 @@ return
 --[[
   2024-09-30
   2024-10-03
+  2024-10-14
 ]]
