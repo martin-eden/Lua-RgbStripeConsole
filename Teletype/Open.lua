@@ -1,5 +1,7 @@
 -- Open UART device by name
 
+-- Last mod.: 2024-10-24
+
 local FileExists = request('!.file_system.file.exists')
 local GetPortParams = request('!.mechs.tty.get_port_params')
 local SetNonBlockingRead = request('!.mechs.tty.set_non_blocking_read')
@@ -32,6 +34,8 @@ local ConnectTo =
 
     self.FileHandle = io.open(PortName, 'r+')
 
+    self.FileHandle:setvbuf('no')
+
     self.BorrowedFileInput.FileHandle = self.FileHandle
     self.BorrowedFileOutput.FileHandle = self.FileHandle
 
@@ -50,3 +54,8 @@ local ConnectTo =
 
 -- Exports:
 return ConnectTo
+
+--[[
+  2024-09-18
+  2024-10-24 setvbuf('no')
+]]
