@@ -89,7 +89,7 @@ return
     end
 
     local CommandFormat =
-      'SPR %03d %03d  %s'
+      '( SPR %03d %03d  %s )'
 
     local Command =
       string.format(
@@ -105,4 +105,5 @@ return
 --[[
   2024-09-30
   2024-10-03
+  2024-10-24
 ]]

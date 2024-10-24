@@ -1,5 +1,7 @@
 -- Generate file with linear plasm data for LED stripe
 
+-- Last mod: 2024-10-24
+
 --[[
   I'm just having fun! I'm tired of dull writing of nicely
   structured infrastructure.
@@ -15,10 +17,6 @@
 package.path = package.path .. ';../../?.lua'
 require('workshop.base')
 
-local Stripe = request('OptimizingStripeWriter.Interface')
-local Output = request('!.concepts.StreamIo.Output.File')
-local Plasm = request('PlasmGenerator.Interface')
-
 -- Stripe length in pixels
 local StripeLength = 60
 
@@ -33,9 +31,12 @@ local StripeLength = 60
 local Brightness = 0.27
 
 -- Name of file where we will write commands
-local OutputFileName = 'Data.Stripe'
+local OutputFileName = 'Stripe commands.is'
 
---
+-- Imports:
+local Stripe = request('OptimizingStripeWriter.Interface')
+local Output = request('!.concepts.StreamIo.Output.File')
+local Plasm = request('PlasmGenerator.Interface')
 
 Output:OpenFile(OutputFileName)
 

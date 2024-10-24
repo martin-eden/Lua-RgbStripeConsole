@@ -1,19 +1,27 @@
 -- RGB stripe output interface wrapper
 
+-- Last mod.: 2024-10-24
+
 --[[
   RGB stripe commands emitter
 
-  Methods emitting command string to <.Output> writer.
+  Methods emitting strings to <.Output> writer.
 
   If arguments are needed for method, they are passed in one table.
+]]
 
-  Input verification
+--[[
+  We're emitting in "Itness" (or "Listness"?) format.
 
-    Our output must satisfy other side interface requirements.
-    Basically it means that index should be in [0, 0xFFFF] and
-    color component in [0, 0xFF].
+  It means that command "D" to update LED stripe is written as
+  "( D )". This allows us to split long commands (like "set pixels")
+  to multiple lines for readability.
 
-    If it is not so, we explode with error.
+  File sender (in "SendData.lua") will parse those lines back
+  to commands and will send commands.
+
+  This way we can insert small pause between sending commands,
+  not between sending lines.
 ]]
 
 --[[

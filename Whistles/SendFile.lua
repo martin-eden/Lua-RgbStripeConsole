@@ -1,24 +1,32 @@
--- Print file linewise
+-- Open file. Parse "Itness" format, send items <Output>. Close file.
 
-local OpenForReading = request('!.file_system.file.OpenForReading')
-local CloseFile = request('!.file_system.file.Close')
+-- Last mod.: 2024-10-24
 
-local PrintFile =
+-- Imports:
+local Input = request('!.concepts.StreamIo.Input.File')
+local Parser = request('!.concepts.Itness.Parser.Interface')
+
+local SendFile =
   function(self, FileName, Output)
-    local FileHandle = OpenForReading(FileName)
+    print(string.format('( Processing file "%s".', FileName))
 
-    assert(FileHandle)
+    Input:OpenFile(FileName)
 
-    print(string.format('( Sending file "%s".', FileName))
+    -- Parse "Itness" to list of items
+    Parser.Input = Input
+    local Items = Parser:Run()
 
-    for Line in FileHandle:lines() do
-      self:SendLine(Line, Output)
-    end
+    Input:CloseFile()
 
-    print(string.format(') Sent file "%s".', FileName))
+    self:SendItems(Items, Output)
 
-
-    CloseFile(FileHandle)
+    print(string.format(') Processed file "%s".', FileName))
   end
 
-return PrintFile
+-- Exports:
+return SendFile
+
+--[[
+  2024-09-18
+  2024-10-24
+]]

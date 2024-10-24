@@ -1,5 +1,7 @@
 -- Read line from file handle with stdout echo
 
+-- Last mod.: 2024-10-24
+
 --[[
   Read line from file handle with echo for human.
 
@@ -15,7 +17,7 @@ local ReadLine =
     end
 
     local PrintLineFormat =
-      '> (%s)'
+      '> [ %s ]'
 
     print(string.format(PrintLineFormat, Line))
 
@@ -27,4 +29,5 @@ return ReadLine
 
 --[[
   2024-09-18
+  2024-10-24
 ]]

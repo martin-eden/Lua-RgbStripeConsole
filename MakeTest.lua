@@ -1,12 +1,16 @@
 -- Generate file with test data for LED stripe
 
+-- Last mod.: 2024-10-24
+
 package.path = package.path .. ';../../?.lua'
 require('workshop.base')
 
+local OutputFileName = 'Stripe commands.is'
+
+-- Imports:
 local Stripe = request('StripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Output.File')
 
-local OutputFileName = 'Data.Stripe'
 Output:OpenFile(OutputFileName)
 
 Stripe:Init(Output)

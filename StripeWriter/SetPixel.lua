@@ -27,7 +27,7 @@ return
     local Red, Green, Blue = UnpackColor(Pixel.Color)
 
     local CommandFormat =
-      'SP %03d  %03d %03d %03d'
+      '( SP %03d  %03d %03d %03d )'
 
     local Command =
       string.format(
@@ -44,4 +44,5 @@ return
 --[[
   2024-09-18
   2024-09-30
+  2024-10-24
 ]]
