@@ -1,8 +1,10 @@
 -- Write command to send pixels to LED stripe
 
+-- Last mod.: 2024-10-25
+
 return
   function(self)
-    self:WriteLine('( D )')
+    self:WriteItem('D')
   end
 
 --[[

@@ -1,6 +1,6 @@
 -- RGB stripe output interface wrapper
 
--- Last mod.: 2024-10-24
+-- Last mod.: 2024-10-25
 
 --[[
   RGB stripe commands emitter
@@ -14,14 +14,18 @@
   We're emitting in "Itness" (or "Listness"?) format.
 
   It means that command "D" to update LED stripe is written as
-  "( D )". This allows us to split long commands (like "set pixels")
-  to multiple lines for readability.
+  "( D )".
 
-  File sender (in "SendData.lua") will parse those lines back
-  to commands and will send commands.
+  This allows us to represent long commands (like "set pixels") in
+  multiple lines for readability. This allows sending several
+  commands in one packet later.
 
-  This way we can insert small pause between sending commands,
-  not between sending lines.
+  This blocks ability to use device file as output. Because we will
+  send "( D )" instead of "D ".
+
+  This formatting occurs in WriteItem(). By overriding that method
+  it's possible to send device commands to device, not to file.
+  If we really want to.
 ]]
 
 --[[
@@ -29,31 +33,38 @@
 
   Just a table with three named color components:
 
-  {
-    Red: byte
-    Green: byte
-    Blue: byte
-  }
+    { Red: byte, Green: byte, Blue: byte }
 ]]
 
 local Interface =
   {
-    -- Maintenance: Set output implementer
+    -- [Config] Set output implementer
     Init = request('Init'),
+
+    -- [Commands]
 
     -- Reset: makes pixels black
     Reset = request('Reset'),
+
     -- Display: send pixels to LED stripe
     Display = request('Display'),
-    -- Set pixel. Format { Index = word, Color = TColor }
+
+    -- Set pixel. Format is { Index = word, Color = TColor }
     SetPixel = request('SetPixel'),
-    -- Set pixels in range. Format { StartIndex = word, StopIndex = word, Colors = { TColor .. } }
+
+    --[[
+      Set pixels in range. Format is
+      { StartIndex = word, StopIndex = word, Colors = { TColor .. } }
+    ]]
     SetPixels = request('SetPixels'),
 
-    -- Maintenance: output implementer
+    -- [/Commands]
+
+    -- [Internal] Output implementer
     Output = nil,
-    -- Handy: print string as line
-    WriteLine = request('WriteLine'),
+
+    -- [Internal] Write string as an item
+    WriteItem = request('WriteItem'),
   }
 
 return Interface
@@ -61,4 +72,5 @@ return Interface
 --[[
   2024-09-18
   2024-09-30
+  2024-10-25
 ]]

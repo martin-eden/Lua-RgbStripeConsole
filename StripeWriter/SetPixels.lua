@@ -1,5 +1,7 @@
 -- Write command to set a range of pixels
 
+-- Last mod.: 2024-10-25
+
 --[[
   Input
 
@@ -15,6 +17,7 @@
     Explode with error().
 ]]
 
+-- Imports:
 local GetIndex = request('Internals.GetIndex')
 local UnpackColor = request('Internals.UnpackColor')
 local GetListChunk = request('!.concepts.List.GetChunk')
@@ -89,7 +92,7 @@ return
     end
 
     local CommandFormat =
-      '( SPR %03d %03d  %s )'
+      'SPR %03d %03d  %s'
 
     local Command =
       string.format(
@@ -99,7 +102,7 @@ return
         ColorsStr
       )
 
-    self:WriteLine(Command)
+    self:WriteItem(Command)
   end
 
 --[[

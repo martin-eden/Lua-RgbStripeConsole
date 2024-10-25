@@ -1,10 +1,12 @@
 -- Write command to reset stripe
 
+-- Last mod.: 2024-10-25
+
 -- Reset makes pixels black but does not affect LED until Display()
 
 return
   function(self)
-    self:WriteLine('( R )')
+    self:WriteItem('R')
   end
 
 --[[

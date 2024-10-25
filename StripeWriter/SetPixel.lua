@@ -1,5 +1,8 @@
 -- Write command to set pixel at given index
 
+-- Last mod.: 2024-10-25
+
+-- Imports:
 local GetIndex = request('Internals.GetIndex')
 local UnpackColor = request('Internals.UnpackColor')
 
@@ -27,7 +30,7 @@ return
     local Red, Green, Blue = UnpackColor(Pixel.Color)
 
     local CommandFormat =
-      '( SP %03d  %03d %03d %03d )'
+      'SP %03d  %03d %03d %03d'
 
     local Command =
       string.format(
@@ -38,7 +41,7 @@ return
         Blue
       )
 
-    self:WriteLine(Command)
+    self:WriteItem(Command)
   end
 
 --[[
