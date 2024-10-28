@@ -10,7 +10,7 @@
   for that example).
 ]]
 
-local DelaySec = 0.001
+local DelaySec = 0.005
 
 local SleepSec = request('!.system.sleep')
 
