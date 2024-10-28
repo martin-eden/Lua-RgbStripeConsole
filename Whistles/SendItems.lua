@@ -1,6 +1,6 @@
 -- Send list of string/list items
 
--- Last mod.: 2024-10-24
+-- Last mod.: 2024-10-28
 
 --[[
   We're making delay after sending each item.
@@ -10,7 +10,7 @@
   for that example).
 ]]
 
-local DelaySec = 0.05
+local DelaySec = 0.001
 
 local SleepSec = request('!.system.sleep')
 
