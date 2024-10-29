@@ -22,6 +22,14 @@ local GetIndex = request('Internals.GetIndex')
 local UnpackColor = request('Internals.UnpackColor')
 local GetListChunk = request('!.concepts.List.GetChunk')
 
+-- Convert color record to string like '255 000 255'
+local GetColorStr =
+  function(Color)
+    local ColorStrFmt = '%03d %03d %03d'
+    local Red, Green, Blue = UnpackColor(Color)
+    return string.format(ColorStrFmt, Red, Green, Blue)
+  end
+
 return
   function(self, Args)
     assert_table(Args)
@@ -38,37 +46,32 @@ return
     -- Make sure we have exact number of colors for stride
     assert(#Colors == Length)
 
-    -- Unpack colors and represent them as string
-    local ColorsStr
-    do
-      local FlattenedColors = {}
+    local Lines = {}
+    local Chunk = {}
+    local ChunkSize = 4
 
-      for Index, Color in ipairs(Colors) do
-        local Red, Green, Blue = UnpackColor(Color)
+    for Index, Color in ipairs(Colors) do
+      local ColorStr = GetColorStr(Color)
+      table.insert(Chunk, ColorStr)
 
-        local ColorStrFormat =
-          '%03d %03d %03d'
-        local ColorStr =
-          string.format(ColorStrFormat, Red, Green, Blue)
-
-        table.insert(FlattenedColors, ColorStr)
+      if (Index % ChunkSize == 0) then
+        local Line = '  ' .. table.concat(Chunk, '  ')
+        table.insert(Lines, Line)
+        Chunk = {}
       end
-
-      ColorsStr = table.concat(FlattenedColors, '  ')
     end
 
-    local CommandFormat =
-      'SPR %03d %03d  %s'
+    local CommandHeaderFmt =
+      'SPR %03d %03d'
 
-    local Command =
-      string.format(
-        CommandFormat,
-        StartIndex,
-        StopIndex,
-        ColorsStr
-      )
+    local CommandHeaderStr =
+      string.format(CommandHeaderFmt, StartIndex, StopIndex);
 
-    self:WriteItem(Command)
+    local DataStr = table.concat(Lines, '\n')
+
+    local CommandStr = CommandHeaderStr .. '\n' .. DataStr .. '\n'
+
+    self:WriteItem(CommandStr)
   end
 
 --[[
