@@ -1,6 +1,6 @@
 -- RGB stripe output interface wrapper
 
--- Last mod.: 2024-10-25
+-- Last mod.: 2024-10-29
 
 --[[
   RGB stripe commands emitter
@@ -17,8 +17,7 @@
   "( D )".
 
   This allows us to represent long commands (like "set pixels") in
-  multiple lines for readability. This allows sending several
-  commands in one packet later.
+  multiple lines for readability.
 
   This blocks ability to use device file as output. Because we will
   send "( D )" instead of "D ".
@@ -60,10 +59,16 @@ local Interface =
 
     -- [/Commands]
 
+    -- [Internal] Delay command text
+    DelayCommand = 'DelayMs',
+
+    -- [Internal] Write command to make delay in milliseconds
+    MakeDelay_Ms = request('MakeDelay_Ms'),
+
     -- [Internal] Output implementer
     Output = nil,
 
-    -- [Internal] Write string as an item
+    -- [Internal] Write string as item in Itness format
     WriteItem = request('WriteItem'),
   }
 
