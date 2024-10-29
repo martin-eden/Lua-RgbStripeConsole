@@ -1,6 +1,6 @@
 -- Open UART device by name
 
--- Last mod.: 2024-10-24
+-- Last mod.: 2024-10-29
 
 local FileExists = request('!.file_system.file.exists')
 local GetPortParams = request('!.mechs.tty.get_port_params')
@@ -13,7 +13,7 @@ local SleepSec = request('!.system.sleep')
   In case of errors explodes.
 ]]
 local ConnectTo =
-  function(self, PortName, Speed)
+  function(self, PortName, Speed_Bps)
     assert_string(PortName)
 
     if not FileExists(PortName) then
@@ -28,9 +28,9 @@ local ConnectTo =
 
     self.OriginalPortParams = GetPortParams(PortName)
 
-    local Baud = Speed or 57600
-    local ReadTimeoutSec = 0.5
-    SetNonBlockingRead(PortName, ReadTimeoutSec, Baud)
+    local Speed_Bps = Speed_Bps or 57600
+    local ReadTimeoutSec = 0.1
+    SetNonBlockingRead(PortName, ReadTimeoutSec, Speed_Bps)
 
     self.FileHandle = io.open(PortName, 'r+')
 
