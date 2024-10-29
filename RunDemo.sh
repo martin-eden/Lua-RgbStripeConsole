@@ -10,7 +10,7 @@ echo "Infinite demo of writing plasm pattern to RGB LED stripe."
 echo
 echo "Press ^Z to terminate this script."
 echo
-echo "(That was the last notification.)"
+echo "(That was our last notification.)"
 echo
 echo "---"
 
