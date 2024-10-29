@@ -1,5 +1,7 @@
 -- Bells and whistles for teletype
 
+-- Last mod.: 2024-10-29
+
 --[[
   I want to see what is read and what is written.
   Also I want send-file functionality.
@@ -13,7 +15,7 @@ return
     ReadLine = request('ReadLine'),
     ReadLines = request('ReadLines'),
 
-    SendItems = request('SendItems'),
+    SendItem = request('SendItem'),
     SendFile = request('SendFile'),
   }
 

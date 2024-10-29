@@ -18,7 +18,7 @@ local SendFile =
 
     Input:CloseFile()
 
-    self:SendItems(Items, Output)
+    self:SendItem(Items, Output)
 
     print(string.format(') Processed file "%s".', FileName))
   end
