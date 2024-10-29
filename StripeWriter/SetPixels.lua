@@ -38,40 +38,6 @@ return
     -- Make sure we have exact number of colors for stride
     assert(#Colors == Length)
 
-    --[[
-      Real world. If we will send long line to Arduino, most
-      of it will be lost. To stay safe we need to send lines
-      under 64 bytes (Arduino's serial buffer size).
-
-      This block splits data to chunks and does self calls.
-    ]]
-    do
-      local NumPixelsPerChunk = 4
-      if (Length > NumPixelsPerChunk) then
-        local Chunk =
-          {
-            StartIndex = StartIndex,
-            StopIndex = 0,
-            Colors = {},
-          }
-
-        while (Chunk.StartIndex <= StopIndex) do
-          Chunk.StopIndex = Chunk.StartIndex + NumPixelsPerChunk - 1
-          if (Chunk.StopIndex > StopIndex) then
-            Chunk.StopIndex = StopIndex
-          end
-          local Colors_StartIndex = Chunk.StartIndex - StartIndex + 1
-          local Colors_StopIndex = Chunk.StopIndex - StartIndex + 1
-          Chunk.Colors = GetListChunk(Colors, Colors_StartIndex, Colors_StopIndex)
-          self:SetPixels(Chunk)
-          Chunk.StartIndex = Chunk.StopIndex + 1
-        end
-
-        -- We won't fall-through
-        return
-      end
-    end
-
     -- Unpack colors and represent them as string
     local ColorsStr
     do
