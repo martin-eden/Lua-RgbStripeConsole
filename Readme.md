@@ -85,29 +85,6 @@ Serial Monitor from Arduino IDE or Arduino CLI). `115200 baud`.
 Password.. no password, just connect and type `?`.
 
 
-## Files
-
-* [MakeTest.lua](MakeTest.lua) is a basic test.
-
-  It creates data file.
-
-* [MakePlasm.lua](MakePlasm.lua) is a "Plasm" gradient generator.
-
-  I've figured out this algorithm like twenty years ago and implemented
-  2D versions in Delphi and QBASIC.
-
-  It creates data file.
-
-  Data file is recompiled to reduce transfer time. It's cool but
-  not necessary step.
-
-* [SendData.lua](SendData.lua) is a file sender.
-
-  File is using my [Itness][Itness] format. Actually any text with
-  balanced `()` and `[]` is in Itness format. It's used to separate
-  data from representation.
-
-
 ### 1D Plasm
 
 Here is basic idea for 1D version.
