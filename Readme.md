@@ -6,11 +6,17 @@ Lua interface for sending data to RGB stripe.
 
 ![Image](Images/Stripe.png)
 
-## Lua code example
+## Lua example and design
 
-Excerpt from [MakeTest.lua](MakeTest.lua).
+Excerpt from [MakeTest.lua][MakeTest].
 
 ```Lua
+Output:OpenFile(OutputFileName)
+
+Stripe:Init(Output)
+
+Stripe:Reset()
+
 local Blue = { Red = 0, Green = 0, Blue = 255 }
 local Green = { Red = 0, Green = 255, Blue = 0 }
 local Red = { Red = 255, Green = 0, Blue = 0 }
@@ -20,22 +26,63 @@ Stripe:SetPixel({ Index = 30, Color = Green })
 Stripe:SetPixel({ Index = 48, Color = Red })
 
 Stripe:Display()
+
+Output:CloseFile()
 ```
 
-## Design
+Generates this data
 
-RGB stripe is connected to Arduino. On Arduino is [firmware][firmware]
-(written by me in C++). It has text interface.
+```
+( R )
+( SP 012  000 000 255 )
+( SP 030  000 255 000 )
+( SP 048  255 000 000 )
+( D )
+( DelayMs 1 )
+```
 
-Lua is used in two roles here.
+[MakePlasm][MakePlasm] generates data for whole stripe which looks like
 
-* File sender
+```
+( R )
+(
+  SPR 000 059
+    068 014 031  050 040 038  068 036 032  068 011 046
+    050 000 018  068 018 035  068 000 029  068 000 055
+    028 033 009  020 017 000  000 029 025  000 046 000
+    002 027 001  026 000 000  027 000 000  009 009 000
+    010 000 000  000 000 011  019 018 000  020 031 000
+    000 025 003  000 054 038  019 062 043  000 068 014
+    000 068 009  000 068 000  011 068 021  000 064 000
+    003 045 023  011 000 017  013 000 017  008 000 000
+    019 000 000  014 002 006  004 026 013  012 002 061
+    060 010 068  050 000 068  066 009 052  064 022 043
+    036 000 048  015 000 027  027 000 005  024 009 006
+    004 046 000  019 035 000  006 058 025  000 058 034
+    024 056 037  026 027 000  029 012 000  023 000 000
+    008 000 020  000 000 006  004 015 000  000 000 012
+    047 044 016  056 057 045  058 065 039  061 057 008
+)
+( D )
+( DelayMs 1 )
+```
 
-  Sends `Data.Stripe` to Arduino.
+[SendData.lua][SendData] parses that data and sends commands to stripe.
 
-* Data generator
+[RunDemo.sh][RunDemo] is just a delayed loop of MakePlasm and SendData.
 
-  That's what example code uses. Creates `Data.Stripe` file.
+
+## Components
+
+RGB stripe is connected to Arduino. Arduino is connected to USB.
+USB can be accessed as "file" `/dev/ttyUSB0` or something like that.
+
+On Arduino is [firmware][Firmware] (written by me in C++).
+It has text interface.
+
+So you can always connect to device via serial interface (try
+Serial Monitor from Arduino IDE or Arduino CLI). `115200 baud`.
+Password.. no password, just connect and type `?`.
 
 
 ## Files
@@ -56,10 +103,9 @@ Lua is used in two roles here.
 
 * [SendData.lua](SendData.lua) is a file sender.
 
-  Sends data file.
-
-  It opens Arduino as device at `/dev/ttyUSB0`. Opens file
-  [`Data.Stripe`](Data.Stripe). And sends it line-by-line.
+  File is using my [Itness][Itness] format. Actually any text with
+  balanced `()` and `[]` is in Itness format. It's used to separate
+  data from representation.
 
 
 ### 1D Plasm
@@ -132,8 +178,14 @@ For Arduino side you'll need Arduino (lol), WS2812B RGB stripe,
 
 ## See also
 
-* [Server part][firmware]
+* [Server part][Firmware]
 * [My other repositories][contents]
 
-[firmware]: https://github.com/martin-eden/Embedded-me_RgbStripeConsole
+[Firmware]: https://github.com/martin-eden/Embedded-me_RgbStripeConsole
+[Itness]: https://github.com/martin-eden/Lua-Itness
 [contents]: https://github.com/martin-eden/contents
+
+[MakeTest]: MakeTest.lua
+[MakePlasm]: MakePlasm.lua
+[SendData]: SendData.lua
+[RunDemo]: RunDemo.sh
