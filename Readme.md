@@ -173,7 +173,7 @@ Tinkering with this function is fun!
 For Lua side it's just Linux, stock Lua 5.3+ and this repo.
 
 For Arduino side you'll need Arduino (lol), WS2812B RGB stripe,
-`arduino-cli` framework and [my implementation][firmware].
+`arduino-cli` framework and my implementation.
 
 
 ## See also
