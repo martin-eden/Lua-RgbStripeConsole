@@ -1,28 +1,30 @@
 -- [Internal] Wrap string as item and send to <.Output>
 
+-- Last mod.: 2024-10-31
+
 -- Imports:
 local Trim = request('!.string.trim')
-local StringToLines = request('!.string.to_lines')
+local Lines = request('!.concepts.Lines.Interface')
 
 local ProcessOneLine =
-  function(Line, Output)
-    Line = Trim(Line)
+  function(String, Output)
+    String = Trim(String)
+
     Output:Write('( ')
-    Output:Write(Line)
+    Output:Write(String)
     Output:Write(' )\n')
   end
 
 local ProcessMultipleLines =
-  function(Lines, Output)
-    Output:Write('(\n')
+  function(InputLines, Output)
+    local OutputLines = new(InputLines)
 
-    for Index, Line in ipairs(Lines) do
-      Output:Write('  ')
-      Output:Write(Line)
-      Output:Write('\n')
-    end
+    OutputLines:Indent()
 
-    Output:Write(')\n')
+    OutputLines:AddFirstLine('(')
+    OutputLines:AddLastLine(')')
+
+    Output:Write(OutputLines:ToString())
   end
 
 --[[
@@ -33,9 +35,10 @@ local ProcessMultipleLines =
 ]]
 local WriteItem =
   function(self, String)
-    local Lines = StringToLines(String)
-    if (#Lines == 1) then
-      ProcessOneLine(Lines[1], self.Output)
+    local Lines = new(Lines)
+    Lines:FromString(String)
+    if Lines:IsOneLine() then
+      ProcessOneLine(Lines:GetFirstLine(), self.Output)
     else
       ProcessMultipleLines(Lines, self.Output)
     end
@@ -48,4 +51,5 @@ return WriteItem
   2024-09-18
   2024-09-30
   2024-10-25
+  2024-10-31
 ]]
