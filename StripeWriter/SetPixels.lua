@@ -21,6 +21,7 @@
 local GetIndex = request('Internals.GetIndex')
 local UnpackColor = request('Internals.UnpackColor')
 local GetListChunk = request('!.concepts.List.GetChunk')
+local Lines = request('!.concepts.Lines.Interface')
 
 -- Convert color record to string like '255 000 255'
 local GetColorStr =
@@ -46,32 +47,42 @@ return
     -- Make sure we have exact number of colors for stride
     assert(#Colors == Length)
 
-    local Lines = {}
-    local Chunk = {}
-    local ChunkSize = 4
+    -- We'll use this object for storing lines
+    local Lines = new(Lines)
 
-    for Index, Color in ipairs(Colors) do
-      local ColorStr = GetColorStr(Color)
-      table.insert(Chunk, ColorStr)
+    -- Serialize pixel colors
+    do
+      local Chunks = {}
+      local ChunksPerLine = 4
 
-      if (Index % ChunkSize == 0) then
-        local Line = '  ' .. table.concat(Chunk, '  ')
-        table.insert(Lines, Line)
-        Chunk = {}
+      for Index, Color in ipairs(Colors) do
+        local ColorStr = GetColorStr(Color)
+        table.insert(Chunks, ColorStr)
+
+        if (Index % ChunksPerLine == 0) then
+          -- "  " is chunks delimiter in line
+          local ChunksStr = table.concat(Chunks, '  ')
+          Lines:AddLastLine(ChunksStr)
+
+          Chunks = {}
+        end
       end
+
+      Lines:Indent()
     end
 
-    local CommandHeaderFmt =
-      'SPR %03d %03d'
+    -- Add header
+    do
+      local HeaderFmt =
+        'SPR %03d %03d'
 
-    local CommandHeaderStr =
-      string.format(CommandHeaderFmt, StartIndex, StopIndex);
+      local HeaderStr =
+        string.format(HeaderFmt, StartIndex, StopIndex);
 
-    local DataStr = table.concat(Lines, '\n')
+      Lines:AddFirstLine(HeaderStr)
+    end
 
-    local CommandStr = CommandHeaderStr .. '\n' .. DataStr .. '\n'
-
-    self:WriteItem(CommandStr)
+    self:WriteItem(Lines:ToString())
   end
 
 --[[
