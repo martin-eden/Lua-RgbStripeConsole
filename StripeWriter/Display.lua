@@ -1,6 +1,6 @@
 -- Write command to send pixels to LED stripe
 
--- Last mod.: 2024-10-29
+-- Last mod.: 2024-10-31
 
 return
   function(self)
@@ -15,7 +15,7 @@ return
 
       So there is no memory for stripes longer than 11 meters.
 
-      11 ms is practical ceil
+      11 ms is practical ceil.
     ]]
 
     -- Our current setup is 1 m stripe
