@@ -1,12 +1,12 @@
 -- Plasm generator interface
 
+-- Last mod.: 2024-11-06
+
 --[[
-  Algorithm turned to class.
+  Set-pixel handler for testing
 
-  You'll need to provide your set-pixel function for practical use.
+  Needed for you to figure out argument format.
 ]]
-
--- Stock set-pixel handler for testing
 local StockSetPixel =
   function(Pixel)
     print(
@@ -21,19 +21,14 @@ local StockSetPixel =
   end
 
 --[[
-  Get noise amplitude
+  Distance transforming function
 
   Try wilder functions that satisfy requirements!
 
-  Input
-
-    float [0.0, 1.0]
-
-  Output
-
-    float [0.0, 1.0]
+  Input: [0.0, 1.0]
+  Output: [0.0, 1.0]
 ]]
-local StockNoiseAmp =
+local DistanceIdentity =
   function(Distance)
     return Distance
   end
@@ -41,37 +36,44 @@ local StockNoiseAmp =
 -- Exports:
 return
   {
-    -- [Main] Generate 1-D gradient
-    Generate = request('Generate'),
+    -- [Config]
 
-    -- [Tune] Your set-pixel callback
+    -- Set-pixel callback
     SetPixel = StockSetPixel,
 
-    -- [Tune] Scaling factor
+    -- Scaling factor
     Scale = 1.0,
 
-    -- [Tune] Distance noise amplitude function [0.0, 1.0]
-    GetNoiseAmp = StockNoiseAmp,
+    -- Distance scaling function [0.0, 1.0] -> [0.0, 1.0]
+    TransformDistance = DistanceIdentity,
 
-    -- [Tune] Max color component value (case for power-limited LED stripes)
+    -- Max color component value (case for power-limited LED stripes)
     MaxColorComponentValue = 80,
 
-    -- [Inner] Gap between leftmost and rightmost pixels. Set in Generate()
+    -- [Main]
+
+    -- Generate 1-D gradient
+    Run = request('Run'),
+
+    -- [Internal]
+
+    -- Gap between leftmost and rightmost pixels. Calculated in Run()
     MaxGap = 1,
 
-    -- [Inner] Generate random color
+    -- Generate random color
     GetRandomColor = request('GetRandomColor'),
 
-    -- [Inner] Recursive filler for <GetMidwayPixel()>
+    -- Recursive filler for GetMidwayPixel()
     Plasm = request('Plasm'),
 
-    -- [Inner] Calculate midway pixel
-    GetMidwayPixel = request('GetMidwayPixel'),
+    -- Midway pixel calculator
+    CalculateMidwayPixel = request('CalculateMidwayPixel'),
 
-    -- [Inner] Given distance [0.0, 1.0], return noise in range [-1.0, +1.0]
+    -- Noise function [0.0, 1.0] -> [-1.0, 1.0]
     MakeDistanceNoise = request('MakeDistanceNoise'),
   }
 
 --[[
   2024-09-30
+  2024-11-06
 ]]

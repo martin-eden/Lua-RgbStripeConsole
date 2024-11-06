@@ -55,7 +55,7 @@ local SetPixel =
     end
   end
 
-local NoiseFunc =
+local TransformDistance =
   function(Distance)
     -- return Distance ^ 0.7
     -- return (1 - (1 - Distance) ^ 2) ^ 0.5
@@ -67,14 +67,14 @@ local NoiseFunc =
   end
 
 PlasmGenerator.SetPixel = SetPixel
-PlasmGenerator.GetNoiseAmp = NoiseFunc
+PlasmGenerator.TransformDistance = TransformDistance
 
 local Brightness = 0.8
 
 PlasmGenerator.MaxColorComponentValue = math.floor(Brightness * 255)
 PlasmGenerator.Scale = 8.0
 
-PlasmGenerator:Generate(0, Config.ImageWidth - 1)
+PlasmGenerator:Run(0, Config.ImageWidth - 1)
 
 OutputFile:OpenFile(Config.OutputFileName)
 

@@ -1,15 +1,6 @@
 -- Return random color respecting max color component value
 
---[[
-  Input
-
-    self
-      MaxColorComponentValue
-
-  Output
-
-    { Red = (:byte), Green = (:byte), Blue = (:byte) }
-]]
+-- Last mod.: 2024-11-06
 
 return
   function(self)
@@ -23,3 +14,8 @@ return
         Blue = Random(0, MaxVal),
       }
   end
+
+--[[
+  2024-09-30
+  2024-11-06
+]]

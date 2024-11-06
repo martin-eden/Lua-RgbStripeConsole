@@ -31,11 +31,12 @@ local GetGap = request('Internals.GetGap')
 return
   function(self, LeftPixel, RightPixel)
     local Gap = GetGap(LeftPixel.Index, RightPixel.Index)
+
     if (Gap <= 0) then
       return
     end
 
-    local MidwayPixel = self:GetMidwayPixel(LeftPixel, RightPixel)
+    local MidwayPixel = self:CalculateMidwayPixel(LeftPixel, RightPixel)
 
     -- Calling external handler, so "self.", not "self:"
     self.SetPixel(MidwayPixel)

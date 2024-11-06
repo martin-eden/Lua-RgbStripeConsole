@@ -1,6 +1,6 @@
 -- Generate file with linear plasm data for LED stripe
 
--- Last mod: 2024-10-24
+-- Last mod: 2024-11-06
 
 --[[
   I'm just having fun! I'm tired of dull writing of nicely
@@ -55,7 +55,7 @@ do
 
   Plasm.Scale = 6.0
 
-  Plasm.GetNoiseAmp =
+  Plasm.TransformDistance =
     function(Distance)
       local Result
       --[[ Circle arc
@@ -77,7 +77,7 @@ do
       return Result
     end
 
-  Plasm:Generate(0, StripeLength - 1)
+  Plasm:Run(0, StripeLength - 1)
 end
 
 Stripe:Display()
