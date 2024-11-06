@@ -16,7 +16,7 @@ require('workshop.base')
 -- Imports:
 local PpmCodec = request('!.concepts.Ppm.Interface')
 local OutputFile = request('!.concepts.StreamIo.Output.File')
-local PlasmGenerator = request('PlasmGenerator.Interface')
+local PlasmGenerator = request('LinearPlasmGenerator.Interface')
 
 -- Table must conform to custom format of PPM codec
 local Image =

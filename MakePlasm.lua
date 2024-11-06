@@ -36,7 +36,7 @@ local OutputFileName = 'Stripe commands.is'
 -- Imports:
 local Stripe = request('OptimizingStripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Output.File')
-local Plasm = request('PlasmGenerator.Interface')
+local Plasm = request('LinearPlasmGenerator.Interface')
 
 Output:OpenFile(OutputFileName)
 
