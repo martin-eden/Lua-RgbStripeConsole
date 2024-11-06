@@ -5,7 +5,11 @@
 Lua interface for sending data to RGB stripe.
 
 ![Image](Images/Plasm_1d.png)
+1-d plasm algorithm results visualization.
+
 ![Image](Images/Stripe.png)
+Similar pattern as displayed on stripe. (Sorry, my phone sucks at
+photos of LEDs. For human eye it looks a lot more smooth and pleasant.)
 
 ## Lua example and design
 
@@ -98,11 +102,13 @@ Then we can just set middle pixel to average color and divide.
 
 But it's boring. We should add some noise.
 
-So we're adding noise. Noise is actually smooth random color function
-between first and last pixels. Value range [-1.0, +1.0].
+So we're adding noise. Noise is dependent of distance between pixels.
+(Like gravity is inversely proportional to distance square. Same
+idea.)
 
-Noise amplitude is dependent of distance between pixels. (Like gravity
-is inversely proportional to distance square. Same idea.)
+So noise is some function of distance. Input range [0.0, 1.0]. Output
+range [0.0, +1.0]. For pleasant patterns it should be smooth and have
+least potential at zero distance.
 
 So for first iteration for two border pixels noise amplitude will have
 greatest potential. To make it random, we multiply amplitude by
@@ -131,17 +137,12 @@ And basically that's it.
 
 #### Noise function
 
-Generated gradient type is determined by noise amplitude function:
-
-```
-NoiseAmpl(Distance: [0.0, 1.0]): [-1.0, +1.0]
-```
+Generated gradient type is determined by noise function.
 
 This function sets degree of freedom for given distance. Moreover,
 it determines how degree of freedom changes when distance is decreasing.
 
-I've tried several variants. Sine, quarter of circle, power.
-You can find them in [MakePlasm.lua](MakePlasm.lua).
+I've tried several variants. Linear, sine, quarter of circle, power.
 
 Tinkering with this function is fun!
 
