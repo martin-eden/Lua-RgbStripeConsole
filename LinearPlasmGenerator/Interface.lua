@@ -50,6 +50,9 @@ return
     -- Max color component value (case for power-limited LED stripes)
     MaxColorComponentValue = 80,
 
+    -- Flag to create tileable pattern
+    OnCircle = false,
+
     -- [Main]
 
     -- Generate 1-D gradient

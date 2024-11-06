@@ -31,6 +31,11 @@ return
     local RightPixel =
       { Index = StopIndex, Color = self:GetRandomColor() }
 
+    -- If tileable pattern (stripe is ring) then end color is then same
+    if self.OnCircle then
+      RightPixel.Color = LeftPixel.Color
+    end
+
     self.SetPixel(RightPixel)
 
     self.MaxGap = GetGap(LeftPixel.Index, RightPixel.Index)
