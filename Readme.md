@@ -4,6 +4,7 @@
 
 Lua interface for sending data to RGB stripe.
 
+![Image](Images/Plasm_1d.png)
 ![Image](Images/Stripe.png)
 
 ## Lua example and design
