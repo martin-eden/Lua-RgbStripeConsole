@@ -8,7 +8,7 @@ local Config =
     InputFileName = 'Plasm_1d.ppm',
     NumCycles = math.huge,
     StripeLength = 60,
-    Delay_ms = 5000,
+    Delay_ms = 500,
     DeviceName = '/dev/ttyUSB0',
     ConnectionSpeed = 115200,
   }
