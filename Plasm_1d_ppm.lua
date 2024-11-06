@@ -5,8 +5,8 @@
 -- Config:
 local Config =
   {
-    ImageWidth = 1000,
-    ImageHeight = 125,
+    ImageWidth = 12000,
+    ImageHeight = 12,
     OutputFileName = 'Plasm_1d.ppm',
   }
 
@@ -69,10 +69,12 @@ local TransformDistance =
 PlasmGenerator.SetPixel = SetPixel
 PlasmGenerator.TransformDistance = TransformDistance
 
-local Brightness = 0.8
+local Brightness = 0.3
 
 PlasmGenerator.MaxColorComponentValue = math.floor(Brightness * 255)
-PlasmGenerator.Scale = 8.0
+PlasmGenerator.Scale = 3600.0
+
+PlasmGenerator.OnCircle = true
 
 PlasmGenerator:Run(0, Config.ImageWidth - 1)
 
