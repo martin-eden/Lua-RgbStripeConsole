@@ -5,8 +5,8 @@
 -- Config:
 local Config =
   {
-    ImageWidth = 1920 - 200,
-    ImageHeight = 1080 - 100,
+    ImageWidth = 1000,
+    ImageHeight = 125,
     OutputFileName = 'Plasm_1d.ppm',
   }
 
@@ -57,27 +57,22 @@ local SetPixel =
 
 local NoiseFunc =
   function(Distance)
-    -- return Distance ^ 1.2
+    -- return Distance ^ 0.7
     -- return (1 - (1 - Distance) ^ 2) ^ 0.5
     -- [[
     local Angle_Deg = Distance * 180 - 90
     local Angle_Rad = math.rad(Angle_Deg)
     return (math.sin(Angle_Rad) + 1) / 2
     --]]
-    --[[
-    local Angle_Deg = Distance * 90
-    local Angle_Rad = math.rad(Angle_Deg)
-    return math.sin(Angle_Rad)
-    --]]
   end
 
 PlasmGenerator.SetPixel = SetPixel
 PlasmGenerator.GetNoiseAmp = NoiseFunc
 
-local Brightness = 0.6
+local Brightness = 0.8
 
 PlasmGenerator.MaxColorComponentValue = math.floor(Brightness * 255)
-PlasmGenerator.Scale = 7.0
+PlasmGenerator.Scale = 8.0
 
 PlasmGenerator:Generate(0, Config.ImageWidth - 1)
 
