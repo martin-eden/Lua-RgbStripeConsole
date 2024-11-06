@@ -1,14 +1,6 @@
--- RGB stripe output interface wrapper
+-- RGB stripe commands emitter
 
--- Last mod.: 2024-10-29
-
---[[
-  RGB stripe commands emitter
-
-  Methods emitting strings to <.Output> writer.
-
-  If arguments are needed for method, they are passed in one table.
-]]
+-- Last mod.: 2024-11-06
 
 --[[
   We're emitting in "Itness" (or "Listness"?) format.
@@ -65,7 +57,7 @@ local Interface =
     -- [Internal] Write command to make delay in milliseconds
     MakeDelay_Ms = request('MakeDelay_Ms'),
 
-    -- [Internal] Output implementer
+    -- [Internal] Output stream
     Output = nil,
 
     -- [Internal] Write string as item in Itness format
