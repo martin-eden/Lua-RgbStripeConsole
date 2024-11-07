@@ -1,0 +1,5 @@
+P3  # Plain portable pixmap
+8 1 255  # Width, Height, Max color component value
+
+080 080 080  000 000 000  000 000 000  000 000 000  000 000 000
+000 000 000  000 000 000  000 000 000  000 000 000  000 000 000

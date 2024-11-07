@@ -1,11 +1,11 @@
 -- Generate 1-d gradient filling and write it to pixmap
 
--- Last mod.: 2024-11-06
+-- Last mod.: 2024-11-07
 
 -- Config:
 local Config =
   {
-    ImageWidth = 30,
+    ImageWidth = 60,
     ImageHeight = 12,
     OutputFileName = 'Plasm_1d.ppm',
   }
