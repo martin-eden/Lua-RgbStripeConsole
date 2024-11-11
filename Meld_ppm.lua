@@ -42,9 +42,9 @@
 
 local Config =
   {
-    InputFileName = 'Plasm_1d.ppm',
-    OutputFileName = 'ScrollMe.ppm',
-    NumTransitionsBetweenPixels = 4,
+    InputFileName = arg[1] or 'Plasm_1d.ppm',
+    OutputFileName = arg[2] or 'ScrollMe.ppm',
+    NumTransitionsBetweenPixels = tonumber(arg[3]) or 4,
   }
 
 package.path = package.path .. ';../../?.lua'
