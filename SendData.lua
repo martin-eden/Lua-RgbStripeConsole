@@ -4,9 +4,9 @@
 
 local Config =
   {
-    DataFileName = 'Stripe commands.is',
-    PortName = '/dev/ttyUSB0',
-    PortSpeed = 115200,
+    DataFileName = arg[1] or 'Stripe commands.is',
+    PortName = arg[2] or '/dev/ttyUSB0',
+    PortSpeed = tonumber(arg[3]) or 115200,
   }
 
 package.path = package.path .. ';../../?.lua'
