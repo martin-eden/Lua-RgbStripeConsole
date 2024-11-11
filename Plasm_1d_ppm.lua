@@ -5,8 +5,8 @@
 -- Config:
 local Config =
   {
-    OutputFileName = arg[1] or 'Plasm_1d.ppm',
-    ImageWidth = tonumber(arg[2]) or 60,
+    ImageWidth = tonumber(arg[1]) or 60,
+    OutputFileName = arg[2] or 'Plasm_1d.ppm',
     ImageHeight = tonumber(arg[3]) or 12,
   }
 

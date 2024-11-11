@@ -13,9 +13,10 @@
 -- Config:
 local Config =
   {
-    InputFileName = arg[1] or 'ScrollMe.ppm',
-    StripeLength = tonumber(arg[2]) or 60,
-    NumCycles = tonumber(arg[3]) or math.huge,
+    NumCycles = tonumber(arg[1]) or math.huge,
+    InputFileName = arg[2] or 'ScrollMe.ppm',
+
+    StripeLength = 60,
 
     -- 55 ms is near hard limit
     Delay_ms = 57,
