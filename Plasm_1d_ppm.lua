@@ -5,9 +5,9 @@
 -- Config:
 local Config =
   {
-    ImageWidth = 60,
-    ImageHeight = 12,
-    OutputFileName = 'Plasm_1d.ppm',
+    OutputFileName = arg[1] or 'Plasm_1d.ppm',
+    ImageWidth = tonumber(arg[2]) or 60,
+    ImageHeight = tonumber(arg[3]) or 12,
   }
 
 package.path = package.path .. ';../../?.lua'
