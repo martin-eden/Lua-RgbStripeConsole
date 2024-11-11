@@ -40,7 +40,7 @@ local Plasm = request('LinearPlasmGenerator.Interface')
 
 Output:Open(OutputFileName)
 
-Stripe:Init(Output)
+Stripe.Output = Output
 
 Stripe:Reset()
 
@@ -88,4 +88,5 @@ Output:Close()
   2024-09-18
   2024-09-25
   2024-09-30
+  2024-11-11
 ]]

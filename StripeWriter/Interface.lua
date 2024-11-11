@@ -1,6 +1,6 @@
 -- RGB stripe commands emitter
 
--- Last mod.: 2024-11-06
+-- Last mod.: 2024-11-11
 
 --[[
   We're emitting in "Itness" (or "Listness"?) format.
@@ -29,38 +29,32 @@
 
 local Interface =
   {
-    -- [Config] Set output implementer
-    Init = request('Init'),
-
-    -- [Commands]
-
-    -- Reset: makes pixels black
-    Reset = request('Reset'),
-
-    -- Display: send pixels to LED stripe
-    Display = request('Display'),
-
-    -- Set pixel. Format is { Index = word, Color = TColor }
-    SetPixel = request('SetPixel'),
-
-    --[[
-      Set pixels in range. Format is
-      { StartIndex = word, StopIndex = word, Colors = { TColor .. } }
-    ]]
-    SetPixels = request('SetPixels'),
-
-    -- [/Commands]
-
-    -- [Internal] Delay command text
-    DelayCommand = 'DelayMs',
-
-    -- [Internal] Write command to make delay in milliseconds
-    MakeDelay_Ms = request('MakeDelay_Ms'),
-
-    -- [Internal] Output stream
+    -- [Config] Output stream
     Output = nil,
 
-    -- [Internal] Write string as item in Itness format
+    -- [Main]
+
+    -- Make pixels black
+    Reset = request('Reset'),
+
+    -- Display pixels on LED stripe
+    Display = request('Display'),
+
+    -- Set pixel
+    SetPixel = request('SetPixel'),
+
+    -- Set pixels in range
+    SetPixels = request('SetPixels'),
+
+    -- [Internal]
+
+    -- Delay command text
+    DelayCommand = 'DelayMs',
+
+    -- Write command to make delay in milliseconds
+    MakeDelay_Ms = request('MakeDelay_Ms'),
+
+    -- Write string as item in Itness format
     WriteItem = request('WriteItem'),
   }
 
@@ -70,4 +64,5 @@ return Interface
   2024-09-18
   2024-09-30
   2024-10-25
+  2024-11-11
 ]]

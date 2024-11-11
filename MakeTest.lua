@@ -13,7 +13,7 @@ local Output = request('!.concepts.StreamIo.Output.File')
 
 Output:Open(OutputFileName)
 
-Stripe:Init(Output)
+Stripe.Output = Output
 
 Stripe:Reset()
 

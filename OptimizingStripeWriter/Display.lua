@@ -6,7 +6,7 @@ local GetListChunk = request('!.concepts.List.GetChunk')
 
 return
   function(self)
-    -- Let's get a list of strides in set of cached pixels
+    -- Let's get a list of strides in a set of cached pixels
     local Strides = {}
 
     local IsInStride = false
@@ -46,9 +46,12 @@ return
       CurrentIndex = CurrentIndex + 1
     end
 
+    -- Connect real stripe writer to our output (1)
+    self.StripeWriter.Output = self.Output
+
     -- Okay, now <Strides> contains {Start: int, Length: int} records
     for Index, Stride in ipairs(Strides) do
-      -- Meh, just single pixel
+      -- Meh, just a single pixel
       if (Stride.Length == 1) then
         self.StripeWriter:SetPixel(
           {
@@ -79,6 +82,20 @@ return
     self.MinIndex = 0
     self.MaxIndex = 0
   end
+
+--[[
+  [1]: self.StripeWriter.Output = self.Output
+
+    Actually we want to set output for implementer just once,
+    when our own self.Output is assigned.
+
+    But this will require attaching metatable on our interface.
+    Or adding SetOutput() method and forcing others to use it.
+
+    All three options are either redundant or increase implementation
+    complexity or not convenient. We're settled on way (1)
+    as a minimal-hassle solution for our case.
+]]
 
 --[[
   2024-09-30

@@ -11,49 +11,53 @@
   Another is SetPixels() that sets stride of pixels to list of colors.
   It requires (3 * N + 2) tokens.
 
-  So if we're optimizing transfer time, we want to use SetPixels()
+  We're optimizing transfer time so we want to use SetPixels()
   when setting two or more adjacent pixels.
 
-  But SetPixels() is not so convenient. And my use case is algorithm
-  that sets pixels in non-sequential way. (I'm looking at you,
-  [PlasmGenerator]!)
+  But my use case is algorithm that sets pixels in non-sequential way.
+  (I'm looking at you, [PlasmGenerator]!)
 
-  So idea of this class is provide fake SetPixel() that just sets
-  pixel in our memory without emitting command to RGB stripe.
+  So idea is provide fake SetPixel() that just sets pixel in our memory
+  without emitting command to RGB stripe.
 
-  At Display() we are scanning our memory, getting list of strides
+  At Display() time we are scanning our memory, getting list of strides
   and send each stride using SetPixels().
 ]]
 
--- [Maintenance] Stripe writer we're actually using
+-- Stripe writer we're actually using
 local StockStripeWriter = request('^.StripeWriter.Interface')
 
 local Clone = request('!.table.clone')
-local MergeInto = request('!.table.merge_and_patch')
+local ForceMerge = request('!.table.merge_and_patch')
 
 local Parasite =
   {
-    Init = request('Init'),
+    -- [Config] Output implementer
+    Output = Output,
+
+    -- [Overridden methods]
     SetPixel = request('SetPixel'),
     Display = request('Display'),
 
-    -- [Maintenance] Stripe writer we're using
+    -- [Internals]
+    -- Stripe writer we're using
     StripeWriter = StockStripeWriter,
-    -- [Maintenance] We'll cache pixels here
+    -- We'll cache pixels here
     Pixels = {},
-    -- [Maintenance] Min index we've encountered
+    -- Min index we've encountered
     MinIndex = 0,
-    -- [Maintenance] Max index we've encountered
+    -- Max index we've encountered
     MaxIndex = 0,
   }
 
 local Interface = Clone(StockStripeWriter)
 
-MergeInto(Interface, Parasite)
+ForceMerge(Interface, Parasite)
 
 -- Exports:
 return Interface
 
 --[[
   2024-09-30
+  2024-11-11
 ]]
