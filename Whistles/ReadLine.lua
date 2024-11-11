@@ -1,6 +1,10 @@
 -- Read line from file handle with stdout echo
 
--- Last mod.: 2024-10-24
+-- Last mod.: 2024-11-11
+
+-- Imports:
+local AssertClassIs = request('!.concepts.Class.AssertIs')
+local InputFileInterface = request('!.concepts.StreamIo.Input.File')
 
 --[[
   Read line from file handle with echo for human.
@@ -8,12 +12,13 @@
   If there are no line, return nil.
 ]]
 local ReadLine =
-  function(self, InputFileHandle)
-    local Line = InputFileHandle:read('l')
+  function(self, Input)
+    AssertClassIs(Input, InputFileInterface)
 
-    -- That's dumb, I know
-    if is_nil(Line) then
-      return nil
+    local Line = Input.FileHandle:read('l')
+
+    if not Line then
+      return
     end
 
     local PrintLineFormat =

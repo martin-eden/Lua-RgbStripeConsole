@@ -1,18 +1,35 @@
 -- Open UART device by name
 
--- Last mod.: 2024-10-29
+-- Last mod.: 2024-11-11
 
+local Config =
+  {
+    Speed_Bps = 57600,
+    ReadTimeout_Sec = 0.1,
+    WarmupDelay_Sec = 3.5,
+  }
+
+-- Imports:
 local FileExists = request('!.file_system.file.exists')
 local GetPortParams = request('!.mechs.tty.get_port_params')
 local SetNonBlockingRead = request('!.mechs.tty.set_non_blocking_read')
 local SleepSec = request('!.system.sleep')
 
 --[[
+  Additional steps to open device as file:
+
+    * Set waited read
+    * Set connection speed
+    * Disable write buffering
+    * Wait some time after opening
+]]
+
+--[[
   Open port both for reading and writing.
 
   In case of errors explodes.
 ]]
-local ConnectTo =
+local Open =
   function(self, PortName, Speed_Bps)
     assert_string(PortName)
 
@@ -28,32 +45,24 @@ local ConnectTo =
 
     self.OriginalPortParams = GetPortParams(PortName)
 
-    local Speed_Bps = Speed_Bps or 57600
-    local ReadTimeoutSec = 0.1
-    SetNonBlockingRead(PortName, ReadTimeoutSec, Speed_Bps)
+    local Speed_Bps = Speed_Bps or Config.Speed_Bps
+
+    SetNonBlockingRead(PortName, Config.ReadTimeout_Sec, Speed_Bps)
 
     self.FileHandle = io.open(PortName, 'r+')
 
     self.FileHandle:setvbuf('no')
 
-    self.BorrowedFileInput.FileHandle = self.FileHandle
-    self.BorrowedFileOutput.FileHandle = self.FileHandle
+    self.Input.FileHandle = self.FileHandle
+    self.Output.FileHandle = self.FileHandle
 
     self.IsConnected = true
 
-    local WarmupDelaySec = 3.5
-    SleepSec(WarmupDelaySec)
-
-    print(
-      string.format(
-        'Device "%s" is opened for reading and writing.',
-        self.PortName
-      )
-    )
+    SleepSec(Config.WarmupDelay_Sec)
   end
 
 -- Exports:
-return ConnectTo
+return Open
 
 --[[
   2024-09-18

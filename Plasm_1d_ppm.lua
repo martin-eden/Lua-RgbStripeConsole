@@ -1,6 +1,6 @@
 -- Generate 1-d gradient filling and write it to pixmap
 
--- Last mod.: 2024-11-07
+-- Last mod.: 2024-11-11
 
 -- Config:
 local Config =
@@ -78,12 +78,12 @@ PlasmGenerator.OnCircle = true
 
 PlasmGenerator:Run(0, Config.ImageWidth - 1)
 
-OutputFile:OpenFile(Config.OutputFileName)
+OutputFile:Open(Config.OutputFileName)
 
 PpmCodec.Output = OutputFile
 PpmCodec:Save(Image)
 
-OutputFile:CloseFile()
+OutputFile:Close()
 
 --[[
   2024-11-06

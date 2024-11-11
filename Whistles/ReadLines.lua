@@ -1,18 +1,15 @@
 -- Read lines from input
 
+-- Last mod.: 2024-11-11
+
 --[[
   Read lines from input and return them as table sequence
-
-  For the sake of first implementation I'm using file handle,
-  not [StreamIo.Input]. Because Lua's file handle have "lines" method
-  while [Input] doesn't. (And probably shouldn't. There should be
-  something of higher order for this. Like [StreamIo.Lines.Input].)
 ]]
 local ReadLines =
-  function(self, FileHandle)
+  function(self, Input)
     local Lines = {}
 
-    while self:ReadLine(FileHandle) do
+    while self:ReadLine(Input) do
       table.insert(Lines, Line)
     end
 
@@ -24,4 +21,5 @@ return ReadLines
 
 --[[
   2024-09-18
+  2024-11-11
 ]]

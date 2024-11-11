@@ -1,6 +1,6 @@
 -- Open file. Parse "Itness" format, send items <Output>. Close file.
 
--- Last mod.: 2024-10-24
+-- Last mod.: 2024-11-11
 
 -- Imports:
 local Input = request('!.concepts.StreamIo.Input.File')
@@ -10,13 +10,13 @@ local SendFile =
   function(self, FileName, Output)
     print(string.format('( Processing file "%s".', FileName))
 
-    Input:OpenFile(FileName)
+    Input:Open(FileName)
 
     -- Parse "Itness" to list of items
     Parser.Input = Input
     local Items = Parser:Run()
 
-    Input:CloseFile()
+    Input:Close()
 
     self:SendItem(Items, Output)
 

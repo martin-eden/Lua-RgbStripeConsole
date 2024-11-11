@@ -1,8 +1,10 @@
 -- Read from UART device. Implements [StreamIo.Input]
 
+-- Last mod.: 2024-11-11
+
 local Read =
   function(self, NumBytes)
-    return self.BorrowedFileInput:Read(NumBytes)
+    return self.Input:Read(NumBytes)
   end
 
 -- Exports:

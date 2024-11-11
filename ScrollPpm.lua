@@ -1,6 +1,6 @@
 -- Open pixmap and scroll it horizontally, sending slices to LED stripe
 
--- Last mod.: 2024-11-07
+-- Last mod.: 2024-11-11
 
 -- Config:
 local Config =
@@ -27,9 +27,10 @@ local PlasmGenerator = request('LinearPlasmGenerator.Interface')
 local StripeWriter = request('StripeWriter.Interface')
 local StringOutput = request('!.concepts.StreamIo.Output.String')
 local StringInput = request('!.concepts.StreamIo.Input.String')
-local Device = request('Teletype.Interface')
+local Device = request('!.concepts.StreamIo.Teletype.Interface')
 local IntessParser = request('!.concepts.Itness.Parser.Interface')
 local Sender = request('Whistles.Interface')
+local MixNumbers = request('!.number.mix_numbers')
 
 local DisplayChunk =
   function(Chunk)
@@ -61,12 +62,12 @@ local DisplayChunk =
 local Image
 
 do
-  InputFile:OpenFile(Config.InputFileName)
+  InputFile:Open(Config.InputFileName)
 
   PpmCodec.Input = InputFile
   Image = PpmCodec:Load()
 
-  InputFile:CloseFile()
+  InputFile:Close()
 end
 
 if not Image then
@@ -76,7 +77,11 @@ end
 
 local MeldValues =
   function(Value_A, Value_B, Part_A)
-    return math.floor(Part_A * Value_A + (1 - Part_A) * Value_B)
+    local Result
+    Result = MixNumbers(Value_A, Value_B, Part_A)
+    Result = math.floor(Result)
+
+    return Result
   end
 
 local MeldPixels =
@@ -94,10 +99,12 @@ local SamplePixel =
     local IntPart = math.floor(X)
     local FracPart = X % 1
 
-    local LeftPixel = Row[IntPart]
+    local LeftPixelIndex = IntPart
+    local LeftPixel = Row[LeftPixelIndex]
 
     local RightPixelIndex
 
+    -- Border pixels are adjacent, we're on the ring
     if (IntPart == #Row) then
       RightPixelIndex = 1
     else

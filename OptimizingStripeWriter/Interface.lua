@@ -29,7 +29,7 @@
 local StockStripeWriter = request('^.StripeWriter.Interface')
 
 local Clone = request('!.table.clone')
-local MergeInto = request('!.table.merge')
+local MergeInto = request('!.table.merge_and_patch')
 
 local Parasite =
   {

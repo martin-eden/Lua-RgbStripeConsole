@@ -1,6 +1,6 @@
 -- Generate file with test data for LED stripe
 
--- Last mod.: 2024-10-24
+-- Last mod.: 2024-11-11
 
 package.path = package.path .. ';../../?.lua'
 require('workshop.base')
@@ -11,7 +11,7 @@ local OutputFileName = 'Stripe commands.is'
 local Stripe = request('StripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Output.File')
 
-Output:OpenFile(OutputFileName)
+Output:Open(OutputFileName)
 
 Stripe:Init(Output)
 
@@ -27,7 +27,7 @@ Stripe:SetPixel({ Index = 48, Color = Red })
 
 Stripe:Display()
 
-Output:CloseFile()
+Output:Close()
 
 --[[
   2024-09-18

@@ -1,6 +1,6 @@
 -- Generate file with linear plasm data for LED stripe
 
--- Last mod: 2024-11-06
+-- Last mod: 2024-11-11
 
 --[[
   I'm just having fun! I'm tired of dull writing of nicely
@@ -38,7 +38,7 @@ local Stripe = request('OptimizingStripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Output.File')
 local Plasm = request('LinearPlasmGenerator.Interface')
 
-Output:OpenFile(OutputFileName)
+Output:Open(OutputFileName)
 
 Stripe:Init(Output)
 
@@ -82,7 +82,7 @@ end
 
 Stripe:Display()
 
-Output:CloseFile()
+Output:Close()
 
 --[[
   2024-09-18

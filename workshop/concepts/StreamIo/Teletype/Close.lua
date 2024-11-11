@@ -1,11 +1,13 @@
 -- Close UART device opened for reading and writing
 
+-- Last mod.: 2024-11-11
+
 local SetPortParams = request('!.mechs.tty.set_port_params')
 
 --[[
   Close our device and zero internal state.
 ]]
-local Disconnect =
+local Close =
   function(self)
     if not self.IsConnected then
       return
@@ -27,8 +29,8 @@ local Disconnect =
     -- io.close(self.FileHandle)
     self.FileHandle = nil
 
-    self.BorrowedFileInput.FileHandle = nil
-    self.BorrowedFileOutput.FileHandle = nil
+    self.Input.FileHandle = nil
+    self.Output.FileHandle = nil
 
     SetPortParams(self.PortName, self.OriginalPortParams)
     self.OriginalPortParams = nil
@@ -36,12 +38,10 @@ local Disconnect =
     self.PortName = nil
 
     self.IsConnected = false
-
-    print(string.format('Device is closed.'))
   end
 
 -- Exports:
-return Disconnect
+return Close
 
 --[[
   2024-09-18
