@@ -37,6 +37,7 @@ local Parasite =
 
     -- [Overridden methods]
     SetPixel = request('SetPixel'),
+    SetPixels = request('SetPixels'),
     Display = request('Display'),
 
     -- [Internals]
