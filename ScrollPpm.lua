@@ -2,16 +2,23 @@
 
 -- Last mod.: 2024-11-11
 
+--[[
+  We're expecting that row below is smooth-shifted version of current
+  row. So order of start coordinates for slice is determined by
+
+    for X = 1, Width
+      for Y = 1, Height
+]]
+
 -- Config:
 local Config =
   {
-    InputFileName = 'Plasm_1d.ppm',
-    NumCycles = math.huge,
-    StripeLength = 60,
+    InputFileName = arg[1] or 'ScrollMe.ppm',
+    StripeLength = tonumber(arg[2]) or 60,
+    NumCycles = tonumber(arg[3]) or math.huge,
 
-    NumTransitionsBetweenPixels = 5,
     -- 55 ms is near hard limit
-    Delay_ms = 55,
+    Delay_ms = 57,
 
     DeviceName = '/dev/ttyUSB0',
     ConnectionSpeed = 115200,
@@ -23,14 +30,12 @@ require('workshop.base')
 -- Imports:
 local PpmCodec = request('!.concepts.Ppm.Interface')
 local InputFile = request('!.concepts.StreamIo.Input.File')
-local PlasmGenerator = request('LinearPlasmGenerator.Interface')
 local StripeWriter = request('StripeWriter.Interface')
 local StringOutput = request('!.concepts.StreamIo.Output.String')
 local StringInput = request('!.concepts.StreamIo.Input.String')
 local Device = request('!.concepts.StreamIo.Teletype.Interface')
 local IntessParser = request('!.concepts.Itness.Parser.Interface')
 local Sender = request('Whistles.Interface')
-local MixNumbers = request('!.number.mix_numbers')
 
 local DisplayChunk =
   function(Chunk)
@@ -56,7 +61,8 @@ local DisplayChunk =
     IntessParser.Input = StringInput
     local ItemsIs = IntessParser:Run()
 
-    Sender:SendItem(ItemsIs, Device)
+    Sender.Output = Device
+    Sender:SendItem(ItemsIs)
   end
 
 local Image
@@ -75,59 +81,20 @@ if not Image then
   return
 end
 
-local MeldValues =
-  function(Value_A, Value_B, Part_A)
-    local Result
-    Result = MixNumbers(Value_A, Value_B, Part_A)
-    Result = math.floor(Result)
+--[[
+  Get chunk from circular array
 
-    return Result
-  end
-
-local MeldPixels =
-  function(PixelA, PixelB, PartA)
-    return
-      {
-        Red = MeldValues(PixelA.Red, PixelB.Red, PartA),
-        Green = MeldValues(PixelA.Green, PixelB.Green, PartA),
-        Blue = MeldValues(PixelA.Blue, PixelB.Blue, PartA),
-      }
-  end
-
-local SamplePixel =
-  function(X, Row)
-    local IntPart = math.floor(X)
-    local FracPart = X % 1
-
-    local LeftPixelIndex = IntPart
-    local LeftPixel = Row[LeftPixelIndex]
-
-    local RightPixelIndex
-
-    -- Border pixels are adjacent, we're on the ring
-    if (IntPart == #Row) then
-      RightPixelIndex = 1
-    else
-      RightPixelIndex = IntPart + 1
-    end
-
-    local RightPixel = Row[RightPixelIndex]
-
-    local LeftPart = 1 - FracPart
-
-    return MeldPixels(LeftPixel, RightPixel, LeftPart)
-  end
-
+  We have Concepts.List:GetChunk() but it does not support wrap-around.
+]]
 local GetChunk =
-  function(Image, StartPos, ChunkLen)
+  function(Row, StartPos, ChunkLen)
     local Result = {}
-
-    local SamplingRow = Image.Pixels[(Image.Height // 2) + 1]
 
     local Column = StartPos
     local StepsDone = 0
+
     while (StepsDone < ChunkLen) do
-      local Pixel = SamplePixel(Column, SamplingRow)
+      local Pixel = Row[Column]
 
       table.insert(Result, Pixel)
 
@@ -149,15 +116,10 @@ do
   Device:Open(Config.DeviceName, Config.ConnectionSpeed)
 
   for Iteration = 1, Config.NumCycles do
-    for StartPos = 1, Image.Width do
-
-      local Chunk = GetChunk(Image, StartPos, Config.StripeLength)
-      DisplayChunk(Chunk)
-
-      for Transition = 1, Config.NumTransitionsBetweenPixels do
-        local FractionalOffset = Transition / (Config.NumTransitionsBetweenPixels + 1)
-        local Position = StartPos + FractionalOffset
-        local Chunk = GetChunk(Image, Position, Config.StripeLength)
+    for X = 1, Image.Width do
+      for Y = 1, Image.Height do
+        local Line = Image.Pixels[Y]
+        local Chunk = GetChunk(Line, X, Config.StripeLength)
         DisplayChunk(Chunk)
       end
     end
@@ -169,4 +131,5 @@ end
 --[[
   2024-11-06
   2024-11-07
+  2024-11-11
 ]]
