@@ -19,6 +19,10 @@ local Whistles = request('Whistles.Interface')
 -- Open UART
 Teletype:Open(Config.PortName, Config.PortSpeed)
 
+-- Attach whistles
+Whistles.Input = Teletype
+Whistles.Output = Teletype
+
 -- Read and echo initial greeting
 Whistles:ReadLines(Teletype)
 

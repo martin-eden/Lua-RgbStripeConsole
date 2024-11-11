@@ -1,6 +1,6 @@
 -- Send list of string/list items
 
--- Last mod.: 2024-10-29
+-- Last mod.: 2024-11-11
 
 --[[
   Regarding delays
@@ -31,12 +31,12 @@ local SleepSec = request('!.system.sleep')
 local InteritemDelay_Ms = 1
 
 local SendItem =
-  function(self, Node, Output)
+  function(self, Node)
     -- Node can be a string or table with list of nodes.
 
     if is_string(Node) then
-      Output:Write(Node)
-      Output:Write(' ')
+      self.Output:Write(Node)
+      self.Output:Write(' ')
       return
     end
 
@@ -66,7 +66,7 @@ local SendItem =
         end
       -- Ordinary item
       else
-        self:SendItem(Item, Output)
+        self:SendItem(Item)
       end
     end
 
@@ -79,4 +79,5 @@ return SendItem
 --[[
   2024-10-24
   2024-10-29
+  2024-11-11
 ]]

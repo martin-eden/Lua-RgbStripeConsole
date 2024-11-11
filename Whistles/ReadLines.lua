@@ -2,14 +2,12 @@
 
 -- Last mod.: 2024-11-11
 
---[[
-  Read lines from input and return them as table sequence
-]]
+-- Read lines from input and return them as table sequence
 local ReadLines =
-  function(self, Input)
+  function(self)
     local Lines = {}
 
-    while self:ReadLine(Input) do
+    while self:ReadLine(self.Input) do
       table.insert(Lines, Line)
     end
 

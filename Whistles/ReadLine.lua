@@ -12,10 +12,10 @@ local InputFileInterface = request('!.concepts.StreamIo.Input.File')
   If there are no line, return nil.
 ]]
 local ReadLine =
-  function(self, Input)
-    AssertClassIs(Input, InputFileInterface)
+  function(self)
+    AssertClassIs(self.Input, InputFileInterface)
 
-    local Line = Input.FileHandle:read('l')
+    local Line = self.Input.FileHandle:read('l')
 
     if not Line then
       return
