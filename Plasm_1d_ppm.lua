@@ -73,7 +73,7 @@ PlasmGenerator.TransformDistance = TransformDistance
 local Brightness = 0.3
 
 PlasmGenerator.MaxColorComponentValue = math.floor(Brightness * 255)
-PlasmGenerator.Scale = 180.0 / Config.ImageWidth
+PlasmGenerator.Scale = 5.0
 
 PlasmGenerator.OnCircle = true
 
