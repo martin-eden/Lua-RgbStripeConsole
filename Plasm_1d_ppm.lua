@@ -40,6 +40,7 @@ local InitImage =
 
 InitImage(Image)
 
+-- Overriding pixel setting to set whole row to that color
 local SetPixel =
   function(Pixel)
     local X = Pixel.Index + 1
