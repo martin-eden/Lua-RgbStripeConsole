@@ -1,6 +1,6 @@
 -- Calculate midway pixel with noise
 
--- Last mod.: 2024-11-06
+-- Last mod.: 2024-11-18
 
 -- Imports:
 local GetGap = request('Internals.GetGap')
@@ -9,38 +9,16 @@ local Clamp = request('Internals.Clamp')
 local Floor = math.floor
 
 --[[
-  Mix values with noise
-
-  Noise is float in [-1.0, 1.0].
-]]
-local Mix =
-  function(Value_A, Value_B, Noise, MaxValue)
-    local Value_Noise = Floor(Noise * MaxValue)
-
-    local Result
-    Result = GetMiddle(Value_A, Value_B) + Value_Noise
-    Result = Clamp(Result, 0, MaxValue)
-
-    return Result
-  end
-
---[[
-  Given left and right pixels calculate midway pixel, adding
-  distance-dependent noise. Apply scaling factor.
+  Given left and right pixels calculate midway pixel,
+  adding distance-dependent noise.
 
   Type TPixel
 
-    {
-      Index: int,
-      Color: { Red, Green, Blue: int }
-    }
+    { Index: int, Color: { Red, Green, Blue: int } }
 
   Input
 
     LeftPixel, RightPixel: TPixel
-
-    self
-      MaxColorComponentValue: byte
 
   Output
 
@@ -59,40 +37,22 @@ local CalculateMidwayPixel =
 
     local MaxValue = self.MaxColorComponentValue
 
-    --[[
-      Calculate color components. Note that noise will be different
-      for each component.
-    ]]
-    local Red, Green, Blue
-    do
-      Red =
-        Mix(
-          LeftPixel.Color.Red,
-          RightPixel.Color.Red,
-          self:MakeDistanceNoise(Distance),
-          MaxValue
-        )
-      Green =
-        Mix(
-          LeftPixel.Color.Green,
-          RightPixel.Color.Green,
-          self:MakeDistanceNoise(Distance),
-          MaxValue
-        )
-      Blue =
-        Mix(
-          LeftPixel.Color.Blue,
-          RightPixel.Color.Blue,
-          self:MakeDistanceNoise(Distance),
-          MaxValue
-        )
+    -- Calculate color components.
+    local Color = { Red = 0, Green = 0, Blue = 0 }
+    for Component in pairs(Color) do
+      local Noise = self:MakeDistanceNoise(Distance)
+      Noise = Noise * MaxValue
+      Noise = Floor(Noise)
+
+      local Value
+      Value = GetMiddle(LeftPixel.Color[Component], RightPixel.Color[Component])
+      Value = Value + Noise
+      Value = Clamp(Value, 0, MaxValue)
+
+      Color[Component] = Value
     end
 
-    return
-      {
-        Index = Index,
-        Color = { Red = Red, Green = Green, Blue = Blue },
-      }
+    return { Index = Index, Color = Color }
   end
 
 -- Exports:
@@ -101,4 +61,5 @@ return CalculateMidwayPixel
 --[[
   2024-09-30
   2024-11-06
+  2024-11-18
 ]]
