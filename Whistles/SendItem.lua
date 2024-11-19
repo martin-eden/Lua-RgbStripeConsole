@@ -1,6 +1,6 @@
 -- Send list of string/list items
 
--- Last mod.: 2024-11-11
+-- Last mod.: 2024-11-19
 
 --[[
   Regarding delays
@@ -53,11 +53,14 @@ local SendItem =
 
     assert_table(Node)
 
-    for Index, Item in ipairs(Node) do
+    local Index = 1
+    while (Index <= #Node) do
+      local Item = Node[Index]
+
       -- Is "delay" processing command?
       if is_string(Item) and (Item == 'DelayMs') then
         -- Consume ("DelayMs", str) pair and make delay
-        -- Advance index
+        -- Advance index to data
         Index = Index + 1
         -- Consume next item
         if not is_string(Node[Index]) then
@@ -79,6 +82,8 @@ local SendItem =
       else
         self:SendItem(Item)
       end
+
+      Index = Index + 1
     end
 
     SleepSec(InteritemDelay_Ms / 1000)
@@ -91,4 +96,5 @@ return SendItem
   2024-10-24
   2024-10-29
   2024-11-11
+  2024-11-19
 ]]
