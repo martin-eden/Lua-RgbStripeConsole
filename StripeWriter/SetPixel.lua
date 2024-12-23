@@ -1,51 +1,35 @@
--- Write command to set pixel at given index
+-- Set pixel color
 
--- Last mod.: 2024-10-25
+-- Last mod.: 2024-12-23
 
 -- Imports:
 local GetIndex = request('Internals.GetIndex')
-local UnpackColor = request('Internals.UnpackColor')
+local SerializeColor = request('Internals.SerializeColor')
 
 --[[
-  Set pixel at given index to given color.
+  Set pixel at given index to given color
 
   Input
 
-    {
-      Index: word - pixel index
-      Color: TColor - pixel color
-        TColor - see [Interface] for format
-    }
-
-  Errors policy
-
-    Explode with error().
+    Index: word - pixel index
+    Color: TColor - pixel color
 ]]
-return
-  function(self, Pixel)
-    assert_table(Pixel)
+local SetPixel =
+  function(self, Index, Color)
+    local Index = GetIndex(Index)
+    local ColorStr = SerializeColor(Color)
 
-    local Index = GetIndex(Pixel.Index)
+    local CommandFormat = 'SP %03d  %s'
+    local Command = string.format(CommandFormat, Index, ColorStr)
 
-    local Red, Green, Blue = UnpackColor(Pixel.Color)
-
-    local CommandFormat =
-      'SP %03d  %03d %03d %03d'
-
-    local Command =
-      string.format(
-        CommandFormat,
-        Index,
-        Red,
-        Green,
-        Blue
-      )
-
-    self:WriteItem(Command)
+    self:WriteCommand(Command)
   end
 
+-- Exports:
+return SetPixel
+
 --[[
-  2024-09-18
-  2024-09-30
-  2024-10-24
+  2024-09 # #
+  2024-10 #
+  2024-12-23
 ]]

@@ -1,36 +1,33 @@
 -- Parse raw pixels data
 
--- Last mod.: 2024-11-03
+-- Last mod.: 2024-11-25
 
---[[
+--[=[
   Parse raw pixels data.
 
-  { [1] = { { '0', '128', '255' } } }
-    ->
-  { [1] = { { Red = 0, Green = 128, Blue = 255 } } }
-]]
+  { { { '0', '128', '255' } } } ->
+
+  { { { 0, 128, 255 --[[ aka .Red, .Green, .Blue ]] } } }
+]=]
 local ParsePixels =
-  function(self, DataIs, Header)
-    local Result = {}
+  function(self, DataIs)
+    local Matrix = {}
 
-    for Row = 1, Header.Height do
-      local PixelsRow = {}
+    for RowIndex, Row in ipairs(DataIs) do
+      Matrix[RowIndex] = {}
 
-      for Column = 1, Header.Width do
-        local PixelIs = DataIs[Row][Column]
+      for ColumnIndex, PixelIs in ipairs(Row) do
         local Pixel = self:ParsePixel(PixelIs)
 
         if not Pixel then
           return
         end
 
-        table.insert(PixelsRow, Pixel)
+        Matrix[RowIndex][ColumnIndex] = Pixel
       end
-
-      table.insert(Result, PixelsRow)
     end
 
-    return Result
+    return Matrix
   end
 
 -- Exports:
@@ -38,4 +35,5 @@ return ParsePixels
 
 --[[
   2024-11-03
+  2024-11-25
 ]]

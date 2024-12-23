@@ -1,30 +1,43 @@
 -- RGB stripe commands emitter
 
--- Last mod.: 2024-11-11
+-- Last mod.: 2024-12-23
 
 --[[
-  We're emitting in "Itness" (or "Listness"?) format.
+  We're emitting commands in device format
 
-  It means that command "D" to update LED stripe is written as
-  "( D )".
+  Basically it means that we're just crafting and writing strings.
 
-  This allows us to represent long commands (like "set pixels") in
-  multiple lines for readability.
+  Device uses text protocol. Items are printable ASCII strings without
+  spaces. Items delimiter is space or newline.
 
-  This blocks ability to use device file as output. Because we will
-  send "( D )" instead of "D ".
+  Device finishes parsing command when it had read all required items.
+  Item is read when we saw delimiter or timeout expired.
+  So we're adding tail delimiter to avoid spending time on timeout.
 
-  This formatting occurs in WriteItem(). By overriding that method
-  it's possible to send device commands to device, not to file.
-  If we really want to.
+  For example "D" is "display pixels" command. We're sending it as
+  "D " (or as "D<newline>").
 ]]
 
 --[[
-  TColor - structure used exclusively for documentation
+  Delays
 
-  Just a table with three named color components:
+  For not entirely clear reasons commands need time delays between
+  them. So we're sleeping some time between commands.
 
-    { Red: byte, Green: byte, Blue: byte }
+  Repurposing this module for writing to file you should keep
+  delay information. Perhaps as command for file interpreter.
+]]
+
+--[[
+  Supported commands subset
+
+  Device has more commands. It can send us pixel color.
+  It can manage stripe length. It can manage output pin.
+
+  We're supporting commands for just setting colors and display.
+
+  ( Yes, of course I can provide here interface for all commands.
+    I wrote that firmware myself. But it's creeping featurism. )
 ]]
 
 local Interface =
@@ -40,29 +53,26 @@ local Interface =
     -- Display pixels on LED stripe
     Display = request('Display'),
 
-    -- Set pixel
+    -- Set pixel: index, color
     SetPixel = request('SetPixel'),
 
-    -- Set pixels in range
+    -- Set segment of pixels: index, colors
     SetPixels = request('SetPixels'),
 
     -- [Internal]
 
-    -- Delay command text
-    DelayCommand = 'DelayMs',
+    -- Delay for given amount of milliseconds
+    Delay_Ms = request('Delay_Ms'),
 
-    -- Write command to make delay in milliseconds
-    MakeDelay_Ms = request('MakeDelay_Ms'),
-
-    -- Write string as item in Itness format
-    WriteItem = request('WriteItem'),
+    -- Write string as command
+    WriteCommand = request('WriteCommand'),
   }
 
 return Interface
 
 --[[
-  2024-09-18
-  2024-09-30
-  2024-10-25
-  2024-11-11
+  2024-09 # #
+  2024-10 #
+  2024-11 #
+  2024-12-23
 ]]

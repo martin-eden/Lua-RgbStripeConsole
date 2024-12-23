@@ -1,39 +1,28 @@
--- Unpack color record to sequence of three components
+-- Unpack color record
 
-local IsByte = request('!.number.is_byte')
+-- Last mod.: 2024-12-24
+
+local DenormalizeColor = request('!.concepts.Image.Color.Denormalize')
 
 --[[
-  Unpack color record
+  Unpack color record to sequence of three byte components
 
   Input
 
-    {
-      Red: byte
-      Green: byte
-      Blue: byte
-    }
+    Color format that is used by [Image.Color].
+    Currently it's three floats (red, green, blue) in [0.0, 1.0].
 
   Output
 
-    Red, Green, Blue
-
-  Errors policy
-
-    Explode
+    Sequence of three color components in byte range [0, 255].
 ]]
 local UnpackColor =
   function(Color)
-    assert_table(Color)
+    local ByteColor = new(Color)
 
-    local Red = Color.Red
-    local Green = Color.Green
-    local Blue = Color.Blue
+    DenormalizeColor(ByteColor)
 
-    assert(IsByte(Red))
-    assert(IsByte(Green))
-    assert(IsByte(Blue))
-
-    return Red, Green, Blue
+    return ByteColor.Red, ByteColor.Green, ByteColor.Blue
   end
 
 -- Exports:
@@ -41,4 +30,5 @@ return UnpackColor
 
 --[[
   2024-09-30
+  2024-12-24
 ]]

@@ -1,14 +1,18 @@
 -- Parse raw pixel data
 
--- Last mod.: 2024-11-03
+-- Last mod.: 2024-11-25
 
---[[
-  Parses raw pixel data to custom Lua table.
+-- Imports:
+local BaseColor = request('!.concepts.Image.Color.Interface')
+local NormalizeColor = request('!.concepts.Image.Color.Normalize')
 
-  { '0', '128', '255' } -> { Red = 0, Green = 128, Blue = 255 }
+--[=[
+  Parses raw pixel data to annotated list
+
+  { '0', '128', '255' } -> { 0, 128, 255 --[[ aka .Red, .Green, .Blue ]] }
 
   In case of problems returns nil.
-]]
+]=]
 local ParsePixel =
   function(self, PixelIs)
     local Red = self:ParseColorComponent(PixelIs[1])
@@ -19,12 +23,11 @@ local ParsePixel =
       return
     end
 
-    return
-      {
-        Red = Red,
-        Green = Green,
-        Blue = Blue,
-      }
+    local Color = new(BaseColor, { Red, Green, Blue })
+
+    NormalizeColor(Color)
+
+    return Color
   end
 
 -- Exports:
@@ -32,4 +35,5 @@ return ParsePixel
 
 --[[
   2024-11-03
+  2024-11-25
 ]]
