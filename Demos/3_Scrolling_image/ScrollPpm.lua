@@ -29,7 +29,7 @@ require('workshop.base')
 
 -- Imports:
 local InputFile = request('!.concepts.StreamIo.Input.File')
-local PpmCodec = request('!.concepts.Ppm.Interface')
+local PpmCodec = request('!.concepts.Netpbm.Interface')
 local Device = request('!.concepts.StreamIo.Teletype.Interface')
 local StripeWriter = request('StripeWriter.Interface')
 
