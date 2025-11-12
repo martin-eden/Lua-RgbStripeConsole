@@ -1,12 +1,12 @@
 -- Reset pixels
 
--- Last mod.: 2024-12-23
+-- Last mod.: 2025-11-12
 
 -- Reset makes pixels black but does not affect LED until Display()
 
 return
   function(self)
-    self:WriteCommand('R')
+    self:WriteCommand('C')
   end
 
 --[[
