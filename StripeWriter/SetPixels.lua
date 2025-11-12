@@ -1,6 +1,6 @@
 -- Set segment of pixels
 
--- Last mod.: 2024-12-23
+-- Last mod.: 2025-11-12
 
 -- Imports:
 local GetIndex = request('Internals.GetIndex')
@@ -22,14 +22,14 @@ local SetPixels =
     local StartIndex = GetIndex(StartIndex)
     local StopIndex = StartIndex + #Colors - 1
 
-    local Command = ''
+    local DataStr = ''
 
     -- Add header
     do
-      local HeaderFmt = 'SPR %03d %03d'
+      local HeaderFmt = '%03d %03d'
       local HeaderStr = string.format(HeaderFmt, StartIndex, StopIndex)
 
-      Command = HeaderStr
+      DataStr = HeaderStr
     end
 
     -- Serialize pixel colors
@@ -43,10 +43,10 @@ local SetPixels =
 
       local ColorsStr = table.concat(Chunks, '  ')
 
-      Command = Command .. '  ' .. ColorsStr
+      DataStr = DataStr .. '  ' .. ColorsStr
     end
 
-    self:WriteCommand(Command)
+    self:WriteCommand('SPR', DataStr)
   end
 
 -- Exports:

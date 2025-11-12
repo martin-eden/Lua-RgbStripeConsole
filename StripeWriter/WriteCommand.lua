@@ -1,24 +1,29 @@
 -- Send string to device
 
--- Last mod.: 2024-12-24
+-- Last mod.: 2025-11-12
 
 --[[
-  Send string to <.Output>
+  Send command and data strings to <.Output>
 
   We're expecting that data is sent to device. So we're adding
   tail delimiter to make it clear that last item is ended.
 
-  For some reasons it only works when we adding small time delay
-  between commands.
+  Firmware parsing became slower from 2024 to 2025.
+  Now it needs additional delay between command and data
+  when operating at 115200 bps.
 ]]
 local WriteCommand =
-  function(self, CommandStr)
+  function(self, CommandStr, DataStr)
     self.Output:Write(CommandStr)
+    if DataStr then
+      self.Output:Write(' ')
+      self:Delay_Ms(1)
+      self.Output:Write(DataStr);
+    end
     self.Output:Write('\n')
-
     self:Delay_Ms(1)
 
-    -- print('> ' .. CommandStr)
+    print('> ' .. CommandStr .. ' ' .. (DataStr or 'nil'))
   end
 
 -- Exports:

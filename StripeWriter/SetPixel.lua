@@ -1,6 +1,6 @@
 -- Set pixel color
 
--- Last mod.: 2024-12-23
+-- Last mod.: 2025-11-12
 
 -- Imports:
 local GetIndex = request('Internals.GetIndex')
@@ -19,10 +19,10 @@ local SetPixel =
     local Index = GetIndex(Index)
     local ColorStr = SerializeColor(Color)
 
-    local CommandFormat = 'SP %03d  %s'
-    local Command = string.format(CommandFormat, Index, ColorStr)
+    local DataFormat = '%03d  %s'
+    local DataStr = string.format(DataFormat, Index, ColorStr)
 
-    self:WriteCommand(Command)
+    self:WriteCommand('SP', DataStr)
   end
 
 -- Exports:
