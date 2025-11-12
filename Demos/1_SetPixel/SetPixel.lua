@@ -21,7 +21,7 @@ require('workshop.base')
 -- Imports:
 local Stripe = request('StripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Teletype.Interface')
-local Color = request('!.concepts.Image.Color.Interface')
+local Color = request('!.concepts.Image.Color.Rgb')
 
 -- Define colors
 local Blue = new(Color, { Blue = 1.0 })
