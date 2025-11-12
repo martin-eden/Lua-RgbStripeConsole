@@ -1,6 +1,6 @@
 -- [Example] Setting all stripe pixels
 
--- Last mod: 2024-12-24
+-- Last mod: 2025-11-12
 
 --[[
   SetPixels(StartIndex, Colors)
@@ -41,29 +41,39 @@ require('workshop.base')
 -- Imports:
 local Stripe = request('StripeWriter.Interface')
 local Output = request('!.concepts.StreamIo.Teletype.Interface')
-local Plasm = request('!.concepts.LinearPlasmGenerator.Interface')
+local Gradient = request('!.concepts.Gradient.1d.Interface')
+local GradientAlgo = request('!.concepts.Gradient.1d.Alternatives.CreateExecutionPlan.Bintree')
+local GradientNoisyPixel = request('!.concepts.Gradient.1d.Alternatives.NoisyCreatePixel.Interface')
 
--- Generate colors (in <Plasm.Image>)
+-- Generate colors to <Gradient.Line>
 do
-  Plasm.ImageLength = Config.StripeLength
-  Plasm.Scale = 6.0
-  Plasm.TransformDistance =
+  Gradient.ColorFormat = 'Rgb'
+  Gradient.LineLength = Config.StripeLength
+  Gradient.CreateExecutionPlan = GradientAlgo
+
+  GradientNoisyPixel.PixelsPerDistance = Config.StripeLength / 3
+  Gradient.CreatePixel = GradientNoisyPixel:Generate_CreatePixel()
+
+  GradientNoisyPixel.GetDistanceNoiseAmplitude =
     function(self, Distance)
+      -- print('Distance', Distance)
       return Distance ^ 0.5
     end
 
-  Plasm:Run()
+  Gradient:Run()
 end
+
+-- local t2s = request('!.table.as_string')
 
 -- Dim image (for better display on stripe)
 do
-  local DimFactor = 0.25
-  local Image = Plasm.Image
+  local DimFactor = 0.5
+  local Image = Gradient.Line
   for X = 1, #Image do
     local Color = Image[X]
-    Color.Red = Color.Red * DimFactor
-    Color.Green = Color.Green * DimFactor
-    Color.Blue = Color.Blue * DimFactor
+    Color[1] = Color[1] * DimFactor
+    Color[2] = Color[2] * DimFactor
+    Color[3] = Color[3] * DimFactor
   end
 end
 
@@ -73,7 +83,7 @@ Stripe.Output = Output
 
 Stripe:Reset()
 
-Stripe:SetPixels(0, Plasm.Image)
+Stripe:SetPixels(1, Gradient.Line)
 
 Stripe:Display()
 
@@ -83,4 +93,5 @@ Output:Close()
   2024-09 # # #
   2024-11 #
   2024-12-24
+  2025-11-12 Sync
 ]]
