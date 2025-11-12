@@ -23,7 +23,7 @@ local WriteCommand =
     self.Output:Write('\n')
     self:Delay_Ms(1)
 
-    print('> ' .. CommandStr .. ' ' .. (DataStr or 'nil'))
+    -- print('> ' .. CommandStr .. ' ' .. (DataStr or 'nil'))
   end
 
 -- Exports:
