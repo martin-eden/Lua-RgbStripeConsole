@@ -1,6 +1,6 @@
 -- Unpack color record
 
--- Last mod.: 2024-12-24
+-- Last mod.: 2025-11-12
 
 local DenormalizeColor = request('!.concepts.Image.Color.Denormalize')
 
@@ -22,7 +22,7 @@ local UnpackColor =
 
     DenormalizeColor(ByteColor)
 
-    return ByteColor.Red, ByteColor.Green, ByteColor.Blue
+    return ByteColor[1], ByteColor[2], ByteColor[3]
   end
 
 -- Exports:
